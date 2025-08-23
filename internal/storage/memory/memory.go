@@ -1,4 +1,4 @@
-package storage
+package memory
 
 import (
 	"fmt"
@@ -9,18 +9,18 @@ import (
 	"github/tahcohcat/same-same/internal/models"
 )
 
-type MemoryStorage struct {
+type Storage struct {
 	vectors map[string]*models.Vector
 	mu      sync.RWMutex
 }
 
-func NewMemoryStorage() *MemoryStorage {
-	return &MemoryStorage{
+func NewStorage() *Storage {
+	return &Storage{
 		vectors: make(map[string]*models.Vector),
 	}
 }
 
-func (ms *MemoryStorage) Store(vector *models.Vector) error {
+func (ms *Storage) Store(vector *models.Vector) error {
 	ms.mu.Lock()
 	defer ms.mu.Unlock()
 
@@ -40,7 +40,7 @@ func (ms *MemoryStorage) Store(vector *models.Vector) error {
 	return nil
 }
 
-func (ms *MemoryStorage) Get(id string) (*models.Vector, error) {
+func (ms *Storage) Get(id string) (*models.Vector, error) {
 	ms.mu.RLock()
 	defer ms.mu.RUnlock()
 
@@ -52,7 +52,7 @@ func (ms *MemoryStorage) Get(id string) (*models.Vector, error) {
 	return vector, nil
 }
 
-func (ms *MemoryStorage) Delete(id string) error {
+func (ms *Storage) Delete(id string) error {
 	ms.mu.Lock()
 	defer ms.mu.Unlock()
 
@@ -64,7 +64,7 @@ func (ms *MemoryStorage) Delete(id string) error {
 	return nil
 }
 
-func (ms *MemoryStorage) List() ([]*models.Vector, error) {
+func (ms *Storage) List() ([]*models.Vector, error) {
 	ms.mu.RLock()
 	defer ms.mu.RUnlock()
 
@@ -76,7 +76,7 @@ func (ms *MemoryStorage) List() ([]*models.Vector, error) {
 	return vectors, nil
 }
 
-func (ms *MemoryStorage) Search(req *models.SearchRequest) ([]*models.SearchResult, error) {
+func (ms *Storage) Search(req *models.SearchRequest) ([]*models.SearchResult, error) {
 	ms.mu.RLock()
 	defer ms.mu.RUnlock()
 

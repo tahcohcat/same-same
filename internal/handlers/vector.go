@@ -5,15 +5,16 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+
 	"github/tahcohcat/same-same/internal/models"
-	"github/tahcohcat/same-same/internal/storage"
+	"github/tahcohcat/same-same/internal/storage/memory"
 )
 
 type VectorHandler struct {
-	storage *storage.MemoryStorage
+	storage *memory.Storage
 }
 
-func NewVectorHandler(storage *storage.MemoryStorage) *VectorHandler {
+func NewVectorHandler(storage *memory.Storage) *VectorHandler {
 	return &VectorHandler{storage: storage}
 }
 
@@ -111,5 +112,5 @@ func (vh *VectorHandler) SearchVectors(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(results)
+	_ = json.NewEncoder(w).Encode(results)
 }

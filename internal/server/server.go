@@ -5,18 +5,19 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+
 	"github/tahcohcat/same-same/internal/handlers"
-	"github/tahcohcat/same-same/internal/storage"
+	"github/tahcohcat/same-same/internal/storage/memory"
 )
 
 type Server struct {
-	storage *storage.MemoryStorage
+	storage *memory.Storage
 	handler *handlers.VectorHandler
 	router  *mux.Router
 }
 
 func NewServer() *Server {
-	storage := storage.NewMemoryStorage()
+	storage := memory.NewStorage()
 	handler := handlers.NewVectorHandler(storage)
 	router := mux.NewRouter()
 
@@ -46,10 +47,10 @@ func (s *Server) setupRoutes() {
 func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status": "healthy"}`))
+	_, _ = w.Write([]byte(`{"status": "healthy"}`))
 }
 
 func (s *Server) Start(addr string) error {
-	log.Printf("Starting server on %s", addr)
+	log.Printf("starting server on :%s", addr)
 	return http.ListenAndServe(addr, s.router)
 }

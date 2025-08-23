@@ -1,17 +1,16 @@
 package models
 
 import (
-	"fmt"
 	"math"
 	"time"
 )
 
 type Vector struct {
-	ID          string            `json:"id"`
-	Embedding   []float64         `json:"embedding"`
-	Metadata    map[string]string `json:"metadata,omitempty"`
-	CreatedAt   time.Time         `json:"created_at"`
-	UpdatedAt   time.Time         `json:"updated_at"`
+	ID        string            `json:"id"`
+	Embedding []float64         `json:"embedding"`
+	Metadata  map[string]string `json:"metadata,omitempty"`
+	CreatedAt time.Time         `json:"created_at"`
+	UpdatedAt time.Time         `json:"updated_at"`
 }
 
 func (v *Vector) CosineSimilarity(other *Vector) float64 {
@@ -45,25 +44,4 @@ func (v *Vector) EuclideanDistance(other *Vector) float64 {
 	}
 
 	return math.Sqrt(sum)
-}
-
-type SearchResult struct {
-	Vector *Vector `json:"vector"`
-	Score  float64 `json:"score"`
-}
-
-type SearchRequest struct {
-	Embedding []float64 `json:"embedding"`
-	Limit     int       `json:"limit,omitempty"`
-	Metadata  map[string]string `json:"metadata,omitempty"`
-}
-
-func (sr *SearchRequest) Validate() error {
-	if len(sr.Embedding) == 0 {
-		return fmt.Errorf("embedding cannot be empty")
-	}
-	if sr.Limit <= 0 {
-		sr.Limit = 10
-	}
-	return nil
 }
