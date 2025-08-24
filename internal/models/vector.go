@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+type Quote struct {
+	Text   string `json:"text"`
+	Author string `json:"author"`
+}
+
 type Vector struct {
 	ID        string            `json:"id"`
 	Embedding []float64         `json:"embedding"`

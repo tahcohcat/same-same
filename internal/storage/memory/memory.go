@@ -76,6 +76,13 @@ func (ms *Storage) List() ([]*models.Vector, error) {
 	return vectors, nil
 }
 
+func (ms *Storage) Count() int {
+	ms.mu.RLock()
+	defer ms.mu.RUnlock()
+
+	return len(ms.vectors)
+}
+
 func (ms *Storage) Search(req *models.SearchRequest) ([]*models.SearchResult, error) {
 	ms.mu.RLock()
 	defer ms.mu.RUnlock()
