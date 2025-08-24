@@ -1,5 +1,12 @@
 # Same-Same Vector Database Microservice
 
+[![Go Version](https://img.shields.io/badge/Go-1.24+-00ADD8?style=flat&logo=go)](https://golang.org)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tahcohcat/same-same)
+[![API](https://img.shields.io/badge/API-REST-orange.svg)](https://github.com/tahcohcat/same-same)
+[![Embeddings](https://img.shields.io/badge/Embeddings-Google%20Gemini-4285F4?style=flat&logo=google)](https://ai.google.dev)
+[![Vector DB](https://img.shields.io/badge/Vector%20DB-In%20Memory-red.svg)](https://github.com/tahcohcat/same-same)
+
 A lightweight RESTful microservice for storing and searching vectors using cosine similarity, with built-in embedding generation for quotes.
 
 ## Features
