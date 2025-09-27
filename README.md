@@ -21,6 +21,10 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
 - Pluggable embedder interface (Gemini, HuggingFace support)
 - JSON API responses
 
+## Usage
+
+🔑 [Usage Documentation](USAGE.md)
+
 ## API Endpoints
 
 ### Vectors
