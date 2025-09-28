@@ -20,10 +20,16 @@ type Server struct {
 
 func NewServer() *Server {
 	storage := memory.NewStorage()
-	
+
 	// Default to Gemini embedder
-	embedder := gemini.NewGeminiEmbedder(os.Getenv("GEMINI_API_KEY"))
-	
+
+	googleAPIKey := os.Getenv("GEMINI_API_KEY")
+	if googleAPIKey == "" {
+		log.Fatal("GEMINI_API_KEY environment variable is required")
+	}
+
+	embedder := gemini.NewGeminiEmbedder(googleAPIKey)
+
 	handler := handlers.NewVectorHandler(storage, embedder)
 	router := mux.NewRouter()
 

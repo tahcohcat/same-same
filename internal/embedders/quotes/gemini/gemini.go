@@ -6,9 +6,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github/tahcohcat/same-same/internal/embedders"
+
+	"github.com/sirupsen/logrus"
 )
 
 type GeminiEmbedder struct {
@@ -63,12 +66,26 @@ func (g *GeminiEmbedder) Embed(text string) ([]float64, error) {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	req, err := http.NewRequest("POST", g.baseURL, bytes.NewBuffer(jsonData))
+	
+	u, err := url.Parse(g.baseURL)
+	if err != nil {
+		panic(err)
+	}
+
+	
+	q := u.Query()
+	q.Set("key", g.apiKey)
+	u.RawQuery = q.Encode()
+
+	req, err := http.NewRequest("POST", u.String(), bytes.NewBuffer(jsonData))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.Header.Set("x-goog-api-key", g.apiKey)
+
+	logrus.WithField("google-api-key", g.apiKey).Infof("Sending request to Gemini API: %s", u.String())
+
+	//req.Header.Set("x-google-api-key", g.apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := g.httpClient.Do(req)
