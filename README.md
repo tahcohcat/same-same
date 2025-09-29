@@ -24,16 +24,21 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
 - In-memory vector storage with thread safety
 - RESTful API for CRUD operations
 - Vector similarity search using cosine similarity
-- Automatic embedding generation using Google Gemini API
+
+- Automatic embedding generation using:
+  - Local TF-IDF embedder (default, no external dependencies)
+  - Google Gemini API
+  - HuggingFace API
 - Quote-specific endpoints for easy text vectorization
 - Metadata filtering and search
-- Pluggable embedder interface (Gemini, HuggingFace support)
+- Pluggable embedder interface (local TF-IDF, Gemini, HuggingFace)
 - JSON API responses
 
 
 ## 🚀 Getting Started 
 
-This section will help you get up and running with the Same-Same Vector DB running on localhost:8080 using a Google Gemini API Key.
+
+This section will help you get up and running with the Same-Same Vector DB running on localhost:8080. By default, the system uses a local TF-IDF embedder, which requires no external API keys or dependencies. You can also use Google Gemini or HuggingFace by setting the EMBEDDER_TYPE environment variable.
 
 ### Step 1: Start the Vector Database
 
@@ -169,9 +174,19 @@ graph TD
 
 ## Setup
 
+
 ### Environment Variables
+You can select the embedder using the `EMBEDDER_TYPE` environment variable:
+
 ```bash
+# Options: local (default), gemini, huggingface
+export EMBEDDER_TYPE=local
+
+# If using Gemini:
 export GEMINI_API_KEY=your_google_gemini_api_key_here
+
+# If using HuggingFace:
+export HUGGINGFACE_API_KEY=your_huggingface_api_key_here
 ```
 
 ### Start the server
@@ -230,18 +245,20 @@ curl http://localhost:8080/api/v1/vectors
 
 ## Architecture
 
+
 ### Embedder Interface
-The system uses a pluggable embedder interface, making it easy to swap between different embedding providers:
+The system uses a pluggable embedder interface, making it easy to swap between different embedding providers. You can select the embedder at runtime using the `EMBEDDER_TYPE` environment variable:
 
 ```go
 type Embedder interface {
-    Embed(text string) ([]float64, error)
+  Embed(text string) ([]float64, error)
 }
 ```
 
 **Supported Embedders:**
-- **Google Gemini** (default): `internal/embedders/quotes/gemini`
-- **HuggingFace**: `internal/embedders/quotes/huggingface`
+- **Local TF-IDF** (default, no external dependencies): `internal/embedders/quotes/local/tfidf`
+- **Google Gemini**: `internal/embedders/quotes/gemini` (set `EMBEDDER_TYPE=gemini` and provide `GEMINI_API_KEY`)
+- **HuggingFace**: `internal/embedders/quotes/huggingface` (set `EMBEDDER_TYPE=huggingface` and provide `HUGGINGFACE_API_KEY`)
 
 ### Project Structure
 ```

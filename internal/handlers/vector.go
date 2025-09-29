@@ -67,9 +67,10 @@ func (vh *VectorHandler) EmbedVector(w http.ResponseWriter, r *http.Request) {
 		ID:        fmt.Sprintf("quote_%d", time.Now().Unix()),
 		Embedding: embedding,
 		Metadata: map[string]string{
-			"type":   "quote",
-			"author": quote.Author,
-			"text":   quote.Text,
+			"type":          "quote",
+			"author":        quote.Author,
+			"text":          quote.Text,
+			"embedder.name": vh.embedder.Name(),
 		},
 	}
 
@@ -151,9 +152,9 @@ func (vh *VectorHandler) ListVectorMetadata(w http.ResponseWriter, r *http.Reque
 	meta := make([]map[string]interface{}, len(vectors))
 	for i, vector := range vectors {
 		meta[i] = map[string]interface{}{
-			"id":        vector.ID,
-			"length":    len(vector.Embedding),
-			"metadata":  vector.Metadata,
+			"id":         vector.ID,
+			"length":     len(vector.Embedding),
+			"metadata":   vector.Metadata,
 			"created_at": vector.CreatedAt,
 			"updated_at": vector.UpdatedAt,
 		}

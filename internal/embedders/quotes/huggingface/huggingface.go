@@ -82,3 +82,7 @@ func (h *Embedder) Embed(text string) ([]float64, error) {
 
 	return embeddings, nil
 }
+
+func (h *Embedder) Name() string {
+	return "huggingface"
+}

@@ -7,7 +7,10 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github/tahcohcat/same-same/internal/embedders"
 	"github/tahcohcat/same-same/internal/embedders/quotes/gemini"
+	"github/tahcohcat/same-same/internal/embedders/quotes/huggingface"
+	"github/tahcohcat/same-same/internal/embedders/quotes/local/tfidf"
 	"github/tahcohcat/same-same/internal/handlers"
 	"github/tahcohcat/same-same/internal/storage/memory"
 )
@@ -21,14 +24,25 @@ type Server struct {
 func NewServer() *Server {
 	storage := memory.NewStorage()
 
-	// Default to Gemini embedder
+	embedderType := os.Getenv("EMBEDDER_TYPE")
+	var embedder embedders.Embedder
 
-	googleAPIKey := os.Getenv("GEMINI_API_KEY")
-	if googleAPIKey == "" {
-		log.Fatal("GEMINI_API_KEY environment variable is required")
+	switch embedderType {
+	case "gemini":
+		googleAPIKey := os.Getenv("GEMINI_API_KEY")
+		if googleAPIKey == "" {
+			log.Fatal("GEMINI_API_KEY environment variable is required")
+		}
+		embedder = gemini.NewGeminiEmbedder(googleAPIKey)
+	case "huggingface":
+		hfAPIKey := os.Getenv("HUGGINGFACE_API_KEY")
+		if hfAPIKey == "" {
+			log.Fatal("HUGGINGFACE_API_KEY environment variable is required")
+		}
+		embedder = huggingface.NewHuggingFaceEmbedder(hfAPIKey)
+	default:
+		embedder = tfidf.NewTFIDFEmbedder()
 	}
-
-	embedder := gemini.NewGeminiEmbedder(googleAPIKey)
 
 	handler := handlers.NewVectorHandler(storage, embedder)
 	router := mux.NewRouter()

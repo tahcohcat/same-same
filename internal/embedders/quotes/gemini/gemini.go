@@ -106,3 +106,7 @@ func (g *GeminiEmbedder) Embed(text string) ([]float64, error) {
 
 	return embedResponse.Embedding.Values, nil
 }
+
+func (g *GeminiEmbedder) Name() string {
+	return "gemini"
+}
