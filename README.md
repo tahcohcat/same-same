@@ -23,7 +23,8 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
 
 ## Usage
 
-🔑 [Usage Documentation](USAGE.md)
+* 🚀 [Quick Start Guide](QUICKSTART.md)
+* 🔑 [General Usage Documentation](USAGE.md)
 
 ## API Endpoints
 
