@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/tahcohcat/same-same/ci-cd.yml?branch=main)](https://github.com/tahcohcat/same-same/actions)
 [![Tests](https://img.shields.io/github/actions/workflow/status/tahcohcat/same-same/ci-cd.yml?branch=main&label=tests)](https://github.com/tahcohcat/same-same/actions)
-[![Docker Pulls](https://img.shields.io/docker/pulls/tahcohcat/same-same?logo=docker)](https://hub.docker.com/r/tahcohcat/same-same)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tahcoh/same-same?logo=docker)](https://hub.docker.com/r/tahcoh/same-same)
 [![API](https://img.shields.io/badge/API-REST-orange.svg)](https://github.com/tahcohcat/same-same)
 [![Vector DB](https://img.shields.io/badge/Vector%20DB-In%20Memory-red.svg)](https://github.com/tahcohcat/same-same)
 ---
