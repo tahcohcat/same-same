@@ -34,7 +34,7 @@ We include a **sample dataset** of public-domain quotes, so you can try out same
 ```bash
 curl -s "http://localhost:8081/api/v1/search" \
   -H "Content-Type: application/json" \
-  -d '{"text": "patience", "limit": 1, "namespace": "quotes"}'
+  -d '{"text": "patience", "limit": 3, "namespace": "quotes"}'
 ```
 
 ### Example response:
@@ -42,16 +42,43 @@ curl -s "http://localhost:8081/api/v1/search" \
 {
   "matches": [
     {
-      "text": "The happiness of your life depends upon the quality of your thoughts. — Marcus Aurelius",
-      "score": 0.88
+      "vector": {
+        "id": "quote_1759143813",
+        "metadata": {
+          "author": "Aristotle",
+          "text": "Wishing to be friends is quick work, but friendship is a slow ripening fruit.",
+          "type": "quote"
+        },
+        "created_at": "0001-01-01T00:00:00Z",
+        "updated_at": "2025-09-29T12:03:33.9520825+01:00"
+      },
+      "score": 0.5861640990760936
     },
     {
-      "text": "Happiness depends upon ourselves. — Aristotle",
-      "score": 0.84
+      "vector": {
+        "id": "quote_1759143810",
+        "metadata": {
+          "author": "Plato",
+          "text": "Opinion is the medium between knowledge and ignorance.",
+          "type": "quote"
+        },
+        "created_at": "0001-01-01T00:00:00Z",
+        "updated_at": "2025-09-29T12:03:30.8416675+01:00"
+      },
+      "score": 0.5502264895305855
     },
     {
-      "text": "The soul becomes dyed with the color of its thoughts. — Marcus Aurelius",
-      "score": 0.80
+      "vector": {
+        "id": "quote_1759143809",
+        "metadata": {
+          "author": "Socrates",
+          "text": "He who is not contented with what he has, would not be contented with what he would like to have.",
+          "type": "quote"
+        },
+        "created_at": "0001-01-01T00:00:00Z",
+        "updated_at": "2025-09-29T12:03:29.7642857+01:00"
+      },
+      "score": 0.5494706619549622
     }
   ]
 }
