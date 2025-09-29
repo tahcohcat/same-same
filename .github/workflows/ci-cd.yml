@@ -48,7 +48,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/same-same:latest
+          tags: ${{ secrets.DOCKER_HUB_USER }}/same-same:latest
 
   deploy:
     runs-on: ubuntu-latest
