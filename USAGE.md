@@ -1,123 +1,20 @@
 Smart Quote Finder - Real-World Application Demo
 # Overview
 
-The Smart Quote Finder is a practical demonstration of the Same-Same Vector Database microservice. It showcases how semantic search can be applied to find inspirational quotes based on meaning rather than exact keyword matches.
+## Usage
 
-## Business Use Cases
-1. Content Management Systems
+If you're new to vector databases or want to explore use cases beyond this project, here are some useful references:
 
-Blog Content Discovery: Find related articles and quotes for blog posts
-Social Media Management: Discover relevant quotes for social media campaigns
-Editorial Assistance: Help writers find thematically similar content
+- [Pinecone Docs](https://docs.pinecone.io) – semantic search, recommendations, and RAG patterns  
+- [Weaviate Developer Hub](https://weaviate.io/developers) – schema design, hybrid search, multimodal data  
+- [Milvus Documentation](https://milvus.io/docs) – large-scale similarity search at production scale  
+- [Qdrant Docs](https://qdrant.tech/documentation/) – hybrid search, filtering, payload management  
+- [Chroma Docs](https://docs.trychroma.com/) – lightweight dev-first vector store  
 
-2. Educational Platforms
-
-Quote Libraries: Build searchable databases of educational quotes
-Research Assistance: Find quotes by topic or sentiment for academic work
-Curriculum Development: Organize inspirational content by themes
-
-3. Personal Development Apps
-
-Daily Motivation: Serve personalized quotes based on user interests
-Mood-Based Recommendations: Find quotes matching current emotional state
-Learning Reinforcement: Provide relevant quotes for self-improvement goals
-
-4. Customer Experience
-
-Chatbot Responses: Enhance customer service with contextually relevant quotes
-Marketing Campaigns: Find quotes that align with brand messaging
-User Engagement: Increase retention with personalized inspirational content
-
-## Quick Start Demo
-Prerequisites
-
-Same-Same Vector DB running on localhost:8080
-Google Gemini API Key configured
-Modern web browser with JavaScript enabled
-
-Step 1: Start the Vector Database
-```bash
-# Set your API key
-export GEMINI_API_KEY=your_google_gemini_api_key_here
-```
-
-```bash
-### Start the service
-go run ./cmd/same-same -addr :8080
-```
-
-```bash
-### Or with Docker
-docker run -d --name same-same -p 8080:8080 -e GEMINI_API_KEY=your_key same-same:latest
-```
-
-Step 2: Launch the Demo Application
-
-Save the Smart Quote Finder HTML file as index.html
-
-```bash
-### Open in a web browser or serve with a local HTTP server:
-python3 -m http.server 3000
-
-###Then visit 
-http://localhost:3000
-```
-
-Step 3: Try the Demo
-
-Add Quotes: The app automatically loads sample quotes on first run
-Search Semantically: Try these example searches:
-
-"finding motivation at work"
-"dealing with difficult times"
-"importance of dreams and goals"
-"taking action instead of talking"
-
-
-
-## Demo Scenarios
-
-### Scenario 1: Content Writer's Assistant
-Use Case: A blogger writing about entrepreneurship needs relevant quotes.
-Steps:
-
-Search: "starting a business and taking risks"
-The system returns quotes about action, dreams, and overcoming challenges
-Writer selects the most relevant quotes for their article
-
-Expected Results:
-
-Steve Jobs quote about loving your work (high similarity)
-Walt Disney quote about taking action (high similarity)
-Eleanor Roosevelt quote about dreams (medium similarity)
-
-### Scenario 2: Personal Development App
-Use Case: A meditation app wants to show mood-appropriate quotes.
-Steps:
-
-User reports feeling "overwhelmed and stressed"
-App searches: "finding peace during difficult moments"
-System returns calming, encouraging quotes
-
-Expected Results:
-
-Aristotle quote about finding light in darkness
-Quotes about perspective and resilience
-Motivational quotes about overcoming challenges
-
-### Scenario 3: Social Media Manager
-Use Case: Planning motivational Monday posts for company social media.
-Steps:
-
-Search: "Monday motivation for work"
-Find quotes about productivity and work satisfaction
-Schedule posts with highest-scoring matches
-
-Expected Results:
-
-Work-related motivational quotes
-Quotes about pursuing excellence
-Productivity and success-focused content
+More tutorials and comparisons:
+- [LangChain Vectorstore Integrations](https://python.langchain.com/docs/integrations/vectorstores/)  
+- [OpenAI Cookbook: Embeddings](https://github.com/openai/openai-cookbook#embeddings)  
+- [Awesome Vector Database (curated list)](https://github.com/mrdbourke/awesome-vector-database)
 
 ## Technical Implementation Details
 ### Vector Similarity Scoring
