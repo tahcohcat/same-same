@@ -54,11 +54,11 @@ graph TD
     end
 
     subgraph Server
-        B[HTTP Server (internal/server)]
-        C[Handlers (internal/handlers)]
-        D[Embedders (internal/embedders)]
-        E[Storage (internal/storage/memory)]
-        F[Models (internal/models)]
+        B[HTTP Server <br/>internal/server]
+        C[Handlers <br/>internal/handlers]
+        D[Embedders <br/>internal/embedders]
+        E[Storage <br/>internal/storage/memory]
+        F[Models <br/>internal/models]
     end
 
     subgraph External
