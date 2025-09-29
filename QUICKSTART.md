@@ -26,18 +26,15 @@ We include a **sample dataset** of public-domain quotes, so you can try out same
 ### Load the quotes into the index
 
 ```bash
-while read line; do
-  curl -s -X POST "http://localhost:8081/docs" \
-    -H "Content-Type: application/json" \
-    -d "{\"text\": \"$line\"}" > /dev/null
-done < examples/data/quotes.txt
+ cat .examples/data/quotes_small.txt | tr -d '\r' | while IFS= read -r line; do   quote=$(printf '%s' "$line" | sed 's/ — .*//; s/\\/\\\\/g; s/"/\\"/g');   author=$(printf '%s' "$line" | sed 's/.* — //; s/\\/\\\\/g; s/"/\\"/g');\
+    curl -s -X POST "http://localhost:8081/api/v1/vectors/embed" -H "Content-Type: application/json" -d "{\"text\":\"$quote\", \"author\":\"$author\"}"; done
 ```
 
 ### Run a similarity search
 ```bash
-curl -s "http://localhost:8081/query" \
+curl -s "http://localhost:8081/api/v1/search" \
   -H "Content-Type: application/json" \
-  -d '{"text": "life purpose and happiness", "k": 3}' | jq
+  -d '{"text": "patience", "limit": 1, "namespace": "quotes"}'
 ```
 
 ### Example response:
