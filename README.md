@@ -45,6 +45,9 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
  - `POST /api/v1/vectors/search` - Search vectors by similarity
  - `POST /api/v1/search` - Search vectors by text (auto-embedding and similarity search)
 
+### Health
+- `GET /health` - Health check endpoint
+
 ### Architecture
 
 The diagram illustrates the core components and data flow of the Same-Same Vector Database Microservice:
@@ -87,9 +90,6 @@ graph TD
     D -->|Embeddings| H
     E --> F
 ```
-
-### Health
-- `GET /health` - Health check endpoint
 
 ## Setup
 
