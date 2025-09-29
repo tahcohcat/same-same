@@ -30,13 +30,12 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
 - Pluggable embedder interface (Gemini, HuggingFace support)
 - JSON API responses
 
-## Usage
 
-# 🚀 Getting Started 
+## 🚀 Getting Started 
 
-This section will help you get up and running with the Same-Same Vector DB running on localhost:8080 usiung a Google Gemini API Key.
+This section will help you get up and running with the Same-Same Vector DB running on localhost:8080 using a Google Gemini API Key.
 
-## Step 1: Start the Vector Database
+### Step 1: Start the Vector Database
 
 ### Set your API key
 ```bash
