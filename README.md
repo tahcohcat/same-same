@@ -1,5 +1,11 @@
 # Same-Same Vector Database Microservice
 
+[![Build Status](https://img.shields.io/github/actions/workflow/status/tahcohcat/same-same/go.yml?branch=main)](https://github.com/tahcohcat/same-same/actions)
+[![Tests](https://img.shields.io/github/actions/workflow/status/tahcohcat/same-same/test.yml?branch=main&label=tests)](https://github.com/tahcohcat/same-same/actions)
+[![Coverage](https://img.shields.io/codecov/c/github/tahcohcat/same-same?logo=codecov)](https://codecov.io/gh/tahcohcat/same-same)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tahcohcat/same-same?logo=docker)](https://hub.docker.com/r/tahcohcat/same-same)
+[![Project Logo](https://img.shields.io/badge/logo-SVG-blue?logo=appveyor)](https://github.com/tahcohcat/same-same)
+
 [![Go Version](https://img.shields.io/badge/Go-1.24+-00ADD8?style=flat&logo=go)](https://golang.org)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tahcohcat/same-same)

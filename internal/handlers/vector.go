@@ -141,6 +141,28 @@ func (vh *VectorHandler) ListVectors(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(vectors)
 }
 
+func (vh *VectorHandler) ListVectorMetadata(w http.ResponseWriter, r *http.Request) {
+	vectors, err := vh.storage.List()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	meta := make([]map[string]interface{}, len(vectors))
+	for i, vector := range vectors {
+		meta[i] = map[string]interface{}{
+			"id":        vector.ID,
+			"length":    len(vector.Embedding),
+			"metadata":  vector.Metadata,
+			"created_at": vector.CreatedAt,
+			"updated_at": vector.UpdatedAt,
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(meta)
+}
+
 func (vh *VectorHandler) SearchVectors(w http.ResponseWriter, r *http.Request) {
 	var req models.SearchByEmbbedingRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {

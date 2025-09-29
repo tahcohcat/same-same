@@ -50,6 +50,7 @@ func (s *Server) setupRoutes() {
 	api.HandleFunc("/vectors/count", s.handler.CountVectors).Methods("GET")
 	api.HandleFunc("/vectors", s.handler.CreateVector).Methods("POST")
 	api.HandleFunc("/vectors", s.handler.ListVectors).Methods("GET")
+	api.HandleFunc("/vectors/metadata", s.handler.ListVectorMetadata).Methods("GET")
 	api.HandleFunc("/vectors/{id}", s.handler.GetVector).Methods("GET")
 	api.HandleFunc("/vectors/{id}", s.handler.UpdateVector).Methods("PUT")
 	api.HandleFunc("/vectors/{id}", s.handler.DeleteVector).Methods("DELETE")
