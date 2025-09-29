@@ -1,18 +1,18 @@
 # Same-Same Vector Database Microservice
 
+
+[![Go Version](https://img.shields.io/badge/Go-1.25+-00ADD8?style=flat&logo=go)](https://golang.org)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/tahcohcat/same-same/ci-cd.yml?branch=main)](https://github.com/tahcohcat/same-same/actions)
 [![Tests](https://img.shields.io/github/actions/workflow/status/tahcohcat/same-same/ci-cd.yml?branch=main&label=tests)](https://github.com/tahcohcat/same-same/actions)
-[![Coverage](https://img.shields.io/codecov/c/github/tahcohcat/same-same?logo=codecov)](https://codecov.io/gh/tahcohcat/same-same)
 [![Docker Pulls](https://img.shields.io/docker/pulls/tahcohcat/same-same?logo=docker)](https://hub.docker.com/r/tahcohcat/same-same)
-[![Project Logo](https://img.shields.io/badge/logo-SVG-blue?logo=appveyor)](https://github.com/tahcohcat/same-same)
-
-[![Go Version](https://img.shields.io/badge/Go-1.24+-00ADD8?style=flat&logo=go)](https://golang.org)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/tahcohcat/same-same)
-[![Pet Project](https://img.shields.io/badge/🐾_Pet_Project-For_Fun-ff69b4?style=flat)](https://github.com/tahcohcat/same-same)
 [![API](https://img.shields.io/badge/API-REST-orange.svg)](https://github.com/tahcohcat/same-same)
-[![Embeddings](https://img.shields.io/badge/Embeddings-Google%20Gemini-4285F4?style=flat&logo=google)](https://ai.google.dev)
 [![Vector DB](https://img.shields.io/badge/Vector%20DB-In%20Memory-red.svg)](https://github.com/tahcohcat/same-same)
+---
+[![gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)](https://ai.google.dev/gemini-api/docs/embeddings)
+[![huggingface](https://img.shields.io/badge/-HuggingFace-FDEE21?style=for-the-badge&logo=HuggingFace&logoColor=black)](https://huggingface.co/)
+[![nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org/)
+[![docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)](https://huggingface.co/)
 
 A lightweight RESTful microservice for storing and searching vectors using cosine similarity, with built-in embedding generation for quotes.
 
@@ -44,6 +44,37 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
  - `DELETE /api/v1/vectors/{id}` - Delete a vector
  - `POST /api/v1/vectors/search` - Search vectors by similarity
  - `POST /api/v1/search` - Search vectors by text (auto-embedding and similarity search)
+
+### Architecture
+
+```mermaid
+graph TD
+    subgraph Client
+        A[User / API Client]
+    end
+
+    subgraph Server
+        B[HTTP Server (internal/server)]
+        C[Handlers (internal/handlers)]
+        D[Embedders (internal/embedders)]
+        E[Storage (internal/storage/memory)]
+        F[Models (internal/models)]
+    end
+
+    subgraph External
+        G[Google Gemini API]
+        H[HuggingFace API]
+    end
+
+    A -->|REST API| B
+    B --> C
+    C --> D
+    C --> E
+    C --> F
+    D -->|Embeddings| G
+    D -->|Embeddings| H
+    E --> F
+```
 
 ### Health
 - `GET /health` - Health check endpoint
