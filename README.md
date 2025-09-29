@@ -29,14 +29,15 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
 ## API Endpoints
 
 ### Vectors
-- `POST /api/v1/vectors/embed` - Create vector from quote text (auto-generates embedding)
-- `GET /api/v1/vectors/count` - Get total number of vectors in database
-- `POST /api/v1/vectors` - Create a new vector manually
-- `GET /api/v1/vectors` - List all vectors
-- `GET /api/v1/vectors/{id}` - Get a specific vector
-- `PUT /api/v1/vectors/{id}` - Update a vector
-- `DELETE /api/v1/vectors/{id}` - Delete a vector
-- `POST /api/v1/vectors/search` - Search vectors by similarity
+ - `POST /api/v1/vectors/embed` - Create vector from quote text (auto-generates embedding)
+ - `GET /api/v1/vectors/count` - Get total number of vectors in database
+ - `POST /api/v1/vectors` - Create a new vector manually
+ - `GET /api/v1/vectors` - List all vectors
+ - `GET /api/v1/vectors/{id}` - Get a specific vector
+ - `PUT /api/v1/vectors/{id}` - Update a vector
+ - `DELETE /api/v1/vectors/{id}` - Delete a vector
+ - `POST /api/v1/vectors/search` - Search vectors by similarity
+ - `POST /api/v1/search` - Search vectors by text (auto-embedding and similarity search)
 
 ### Health
 - `GET /health` - Health check endpoint
@@ -67,23 +68,19 @@ curl -X POST http://localhost:8080/api/v1/vectors/embed \
 
 ### Search similar quotes
 ```bash
-# First, get an embedding for your query
-curl -X POST http://localhost:8080/api/v1/vectors/embed \
+# Search similar quotes by text (auto-embedding)
+curl -X POST http://localhost:8080/api/v1/search \
   -H "Content-Type: application/json" \
   -d '{
     "text": "Follow your passion in work",
-    "author": "Query"
-  }'
-
-# Then search using the returned embedding
-curl -X POST http://localhost:8080/api/v1/vectors/search \
-  -H "Content-Type: application/json" \
-  -d '{
-    "embedding": [0.1, 0.2, 0.3, ...],
+    "namespace": "quote",
     "limit": 5,
-    "metadata": {"type": "quote"}
+    "return_embedding": false
   }'
 ```
+
+**Description:**
+`POST /api/v1/search` takes a text query, automatically generates an embedding, and returns the most similar vectors. You can specify `namespace` to filter by type (e.g., `quote`), set `limit` for number of results, and `return_embedding` to include/exclude embeddings in the response.
 
 ### Create vector manually
 ```bash
