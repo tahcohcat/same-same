@@ -104,8 +104,10 @@ curl -s "http://localhost:8081/api/v1/search" \
   ]
 }
 ```
+
 For more ideas and other usage documentation see the more general guide:
  * 🔑 [General Usage Documentation](USAGE.md)
+ * 📖 [OpenAPI Specification Section](USAGE.md#openapi-specification)
 
 ## API Endpoints
 

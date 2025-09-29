@@ -243,3 +243,26 @@ Multi-modal: Text, image, and audio embeddings
 Real-time Learning: Updating embeddings based on user feedback
 
 This Smart Quote Finder demonstrates the practical value of semantic search in real-world applications, providing a foundation for more complex content discovery systems.
+
+An OpenAPI specification (`openapi.yaml`) is included at the root of this repository. This spec describes all available endpoints, request/response formats, and data models for the Same-Same API.
+
+# OpenAPI Specification
+
+**How to view and use the OpenAPI spec:**
+
+- **Visualize and interact:**
+  - Use [Swagger Editor](https://editor.swagger.io/) or [Redoc](https://redocly.github.io/redoc/) to upload or paste the YAML and explore the API interactively.
+  - Import the YAML into [Insomnia](https://insomnia.rest/) or [Postman](https://www.postman.com/) to try requests directly.
+
+- **Render as documentation:**
+  - Host Swagger UI or Redoc as a static site to provide live API docs for users and contributors.
+  - You can also use tools like [ReDoc CLI](https://github.com/Redocly/redoc) to generate HTML documentation from the spec.
+
+**Why use the OpenAPI spec?**
+
+- Quickly understand all endpoints and their parameters.
+- Generate client SDKs in many languages.
+- Validate requests and responses.
+- Share and collaborate on API design.
+
+See [`openapi.yaml`](./openapi.yaml) for the full specification.

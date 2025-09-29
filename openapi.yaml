@@ -1,0 +1,240 @@
+openapi: 3.0.3
+info:
+  title: Same-Same Vector Database API
+  version: 1.0.0
+  description: RESTful API for storing and searching vector embeddings with quote support.
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/v1/vectors/embed:
+    post:
+      summary: Create vector from quote text (auto-generates embedding)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Quote'
+      responses:
+        '201':
+          description: Vector created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vector'
+        '400':
+          description: Invalid request
+  /api/v1/vectors:
+    post:
+      summary: Create a new vector manually
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vector'
+      responses:
+        '201':
+          description: Vector created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vector'
+        '400':
+          description: Invalid request
+    get:
+      summary: List all vectors
+      responses:
+        '200':
+          description: List of vectors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vector'
+  /api/v1/vectors/{id}:
+    get:
+      summary: Get a specific vector
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vector found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vector'
+        '404':
+          description: Not found
+    put:
+      summary: Update a vector
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vector'
+      responses:
+        '200':
+          description: Vector updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vector'
+        '400':
+          description: Invalid request
+    delete:
+      summary: Delete a vector
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not found
+  /api/v1/vectors/search:
+    post:
+      summary: Search vectors by similarity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchByEmbeddingRequest'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+        '400':
+          description: Invalid request
+  /api/v1/search:
+    post:
+      summary: Search vectors by text (auto-embedding and similarity search)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchByTextRequest'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matches:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SearchResult'
+        '400':
+          description: Invalid request
+  /api/v1/vectors/count:
+    get:
+      summary: Get total number of vectors in database
+      responses:
+        '200':
+          description: Vector count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+  /health:
+    get:
+      summary: Health check endpoint
+      responses:
+        '200':
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+components:
+  schemas:
+    Quote:
+      type: object
+      properties:
+        text:
+          type: string
+        author:
+          type: string
+      required: [text, author]
+    Vector:
+      type: object
+      properties:
+        id:
+          type: string
+        embedding:
+          type: array
+          items:
+            type: number
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    SearchByEmbeddingRequest:
+      type: object
+      properties:
+        embedding:
+          type: array
+          items:
+            type: number
+        limit:
+          type: integer
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+      required: [embedding]
+    SearchByTextRequest:
+      type: object
+      properties:
+        text:
+          type: string
+        namespace:
+          type: string
+        limit:
+          type: integer
+        return_embedding:
+          type: boolean
+      required: [text]
+    SearchResult:
+      type: object
+      properties:
+        Vector:
+          $ref: '#/components/schemas/Vector'
+        Score:
+          type: number
