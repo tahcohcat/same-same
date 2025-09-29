@@ -47,6 +47,18 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
 
 ### Architecture
 
+The diagram illustrates the core components and data flow of the Same-Same Vector Database Microservice:
+
+ * **Client**: Users or API clients interact with the system via REST API calls.
+ * **Server**: The HTTP server receives requests and delegates them to handlers, which coordinate embedding generation, vector storage, and data modeling.
+   * **Handlers** process API requests and orchestrate operations.
+   * **Embedders** generate vector embeddings using external services (Google Gemini or HuggingFace).
+   * **Storage** manages vectors in memory for fast access and similarity search.
+   * **Models** define the data structures used throughout the system.
+ * **External Services**: Embedding providers (Google Gemini, HuggingFace) are called to transform text into high-dimensional vectors.
+This modular design enables easy extension, integration of new embedders, and rapid semantic search capabilities.
+
+
 ```mermaid
 graph TD
     subgraph Client
