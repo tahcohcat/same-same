@@ -1,6 +1,3 @@
-## Performance Issue Template
-
-```markdown
 ---
 name: ⚡ Performance Issue
 about: Report a performance problem
@@ -46,16 +43,19 @@ What performance were you expecting?
 ###  Configuration
 Share relevant configuration:
 
+```yaml
 # docker-compose.yml resource limits
 deploy:
   resources:
     limits:
       memory: 512M
       cpus: '0.5'
+```
 
+```bash
 # Environment variables
 RATE_LIMIT_REQUESTS_PER_MINUTE=60
-
+```
 
 ###  Profiling Data
 If you have profiling data, please include it:
@@ -67,4 +67,3 @@ If you have ideas for performance improvements, share them here.
 
 ###  Additional Context
 Any other information about the performance issue.
-```

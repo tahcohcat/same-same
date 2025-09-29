@@ -1,5 +1,3 @@
-## Feature Request Template
-```markdown
 ---
 name: ✨ Feature Request
 about: Suggest an idea for this project
@@ -30,18 +28,20 @@ If applicable, add mockups, code examples, or API designs to help explain your f
 ### API Example (if applicable):
 
 # Example API call
+```bash
 curl -X POST http://localhost:8080/api/v1/new-endpoint \
   -H "Content-Type: application/json" \
   -d '{"example": "data"}'
-
+```
 
 ### Code Example (if applicable):
 
+```go
 // Example usage
 func ExampleUsage() {
     // Your example here
 }
-
+```
 
 ## Priority
 - [ ] Low - Nice to have
@@ -65,4 +65,3 @@ If you have ideas on how this could be implemented, please share them here.
 Link to any related issues or discussions:
 - Closes #123
 - Related to #456
-```

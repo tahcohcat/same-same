@@ -1,6 +1,3 @@
-## Bug Report Template
-
-```markdown
 ---
 name: 🐛 Bug Report
 about: Create a report to help us improve
@@ -34,23 +31,27 @@ A clear and concise description of what actually happened.
 ## API Details (if applicable)
 - Endpoint: [e.g. POST /api/v1/vectors/embed]
 - Request Body: 
+```json
 {
   "text": "example",
   "author": "test"
 }
+```
 
 - Response Status: [e.g. 500]
 - Response Body:
-
+```json
 {
   "error": "example error message"
 }
-
+```
 
 ##  Logs
 If applicable, add logs to help explain your problem.
 
+```terminal
 [2024-01-01 10:00:00] ERROR: example error message
+```
 
 ## Screenshots
 If applicable, add screenshots to help explain your problem.
@@ -60,4 +61,3 @@ Add any other context about the problem here.
 
 ## 🤔 Possible Solution
 If you have any ideas on how to solve this issue, please describe them here.
-```

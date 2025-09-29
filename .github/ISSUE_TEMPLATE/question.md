@@ -1,4 +1,3 @@
-```markdown
 ---
 name:  Question / Support
 about: Ask a question or get support
@@ -18,9 +17,13 @@ Describe the approaches you've already attempted.
 ###  Code/Configuration
 Please share relevant code, configuration, or commands:
 
+```go
 // Your code here
+```
 
 # Commands you've run
+```bash
+```
 
 // Configuration files
 
@@ -54,4 +57,3 @@ Any other information that might be helpful.
 - Share ideas or get feedback
 - Ask open-ended questions
 - Start community conversations
-```

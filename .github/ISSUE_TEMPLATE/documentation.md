@@ -1,6 +1,3 @@
-## Documentation Issue Template
-
-```markdown
 ---
 name:  Documentation Issue
 about: Report an issue with documentation
@@ -29,15 +26,12 @@ assignees: ''
 ###  Current Content
 Quote or describe the current problematic content:
 
-
 Current problematic text here
-
 
 ### Suggested Improvement
 Describe what should be changed or added:
 
 Suggested replacement or addition here
-
 
 ###  Why This Matters
 Explain why this documentation issue should be prioritized:
@@ -54,4 +48,3 @@ Explain why this documentation issue should be prioritized:
 
 ###  Additional Context
 Any other context, screenshots, or information about the documentation issue.
-```
