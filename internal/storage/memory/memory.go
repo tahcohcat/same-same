@@ -7,6 +7,8 @@ import (
 	"time"
 
 	"github/tahcohcat/same-same/internal/models"
+
+	"github.com/sirupsen/logrus"
 )
 
 type Storage struct {
@@ -37,6 +39,12 @@ func (ms *Storage) Store(vector *models.Vector) error {
 	}
 
 	ms.vectors[vector.ID] = vector
+
+	logrus.WithFields(logrus.Fields{
+		"vector_id":  vector.ID,
+		"created_at": vector.CreatedAt,
+	}).Debug("vector stored")
+
 	return nil
 }
 
@@ -48,6 +56,12 @@ func (ms *Storage) Get(id string) (*models.Vector, error) {
 	if !exists {
 		return nil, fmt.Errorf("vector with ID %s not found", id)
 	}
+
+	logrus.WithFields(logrus.Fields{
+		"vector_id":  vector.ID,
+		"created_at": vector.CreatedAt,
+		"updated_at": vector.UpdatedAt,
+	}).Debug("vector found")
 
 	return vector, nil
 }
@@ -83,7 +97,7 @@ func (ms *Storage) Count() int {
 	return len(ms.vectors)
 }
 
-func (ms *Storage) Search(req *models.SearchRequest) ([]*models.SearchResult, error) {
+func (ms *Storage) Search(req *models.SearchByEmbbedingRequest) ([]*models.SearchResult, error) {
 	ms.mu.RLock()
 	defer ms.mu.RUnlock()
 
@@ -91,14 +105,27 @@ func (ms *Storage) Search(req *models.SearchRequest) ([]*models.SearchResult, er
 
 	queryVector := &models.Vector{Embedding: req.Embedding}
 
+	ctxLog := logrus.WithFields(logrus.Fields{
+		"query_vector.lenght": len(queryVector.Embedding),
+	})
+
 	for _, vector := range ms.vectors {
 		if len(vector.Embedding) != len(req.Embedding) {
+			ctxLog.WithFields(logrus.Fields{
+				"skipped_vector_id":     vector.ID,
+				"skipped_vector_length": len(vector.Embedding),
+			}).Warn("skipping vector due to embedding length mismatch")
 			continue
 		}
 
-		if req.Metadata != nil && !matchesMetadata(vector.Metadata, req.Metadata) {
-			continue
-		}
+		//todo: rethink the criteria for metadata filtering
+		// if req.Metadata != nil && !matchesMetadata(vector.Metadata, req.Metadata) {
+		// 	ctxLog.WithFields(logrus.Fields{
+		// 		"skipped_vector_id": vector.ID,
+		// 		"skipped_vector_metadata": vector.Metadata,
+		// 	}).Debug("skipping vector due to metadata mismatch")
+		// 	continue
+		// }
 
 		score := queryVector.CosineSimilarity(vector)
 		results = append(results, &models.SearchResult{
@@ -107,6 +134,8 @@ func (ms *Storage) Search(req *models.SearchRequest) ([]*models.SearchResult, er
 		})
 	}
 
+	ctxLog.WithField("matched_vectors", len(results)).Debug("search completed")
+
 	sort.Slice(results, func(i, j int) bool {
 		return results[i].Score > results[j].Score
 	})
@@ -114,6 +143,8 @@ func (ms *Storage) Search(req *models.SearchRequest) ([]*models.SearchResult, er
 	if req.Limit > 0 && len(results) > req.Limit {
 		results = results[:req.Limit]
 	}
+
+	ctxLog.WithField("returned_vectors", len(results)).Debug("results limited")
 
 	return results, nil
 }

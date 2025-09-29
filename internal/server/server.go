@@ -54,6 +54,7 @@ func (s *Server) setupRoutes() {
 	api.HandleFunc("/vectors/{id}", s.handler.UpdateVector).Methods("PUT")
 	api.HandleFunc("/vectors/{id}", s.handler.DeleteVector).Methods("DELETE")
 	api.HandleFunc("/vectors/search", s.handler.SearchVectors).Methods("POST")
+	api.HandleFunc("/search", s.handler.SearchByText).Methods("POST")
 
 	s.router.HandleFunc("/health", s.healthCheck).Methods("GET")
 }

@@ -32,6 +32,11 @@ func (vh *VectorHandler) CreateVector(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := vector.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	if err := vh.storage.Store(&vector); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -137,7 +142,7 @@ func (vh *VectorHandler) ListVectors(w http.ResponseWriter, r *http.Request) {
 }
 
 func (vh *VectorHandler) SearchVectors(w http.ResponseWriter, r *http.Request) {
-	var req models.SearchRequest
+	var req models.SearchByEmbbedingRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
@@ -158,9 +163,57 @@ func (vh *VectorHandler) SearchVectors(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(results)
 }
 
+func (vh *VectorHandler) SearchByText(w http.ResponseWriter, r *http.Request) {
+
+	var req models.SearchByTextRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+	if err := req.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if req.Limit == 0 {
+		req.Limit = 5
+	}
+
+	// 1. Embed the text
+	embedding, err := vh.embedder.Embed(req.Text)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// 2. Run similarity search
+	results, err := vh.storage.Search(&models.SearchByEmbbedingRequest{
+		Embedding: embedding,
+		Limit:     req.Limit,
+		Metadata:  map[string]string{"type": req.Namespace},
+	})
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if !req.ReturnEmbedding {
+		for _, res := range results {
+			res.Vector.Embedding = nil
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+
+	// 3. Return matches
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"matches": results,
+	})
+}
+
 func (vh *VectorHandler) CountVectors(w http.ResponseWriter, r *http.Request) {
 	count := vh.storage.Count()
-	
+
 	response := map[string]int{
 		"count": count,
 	}

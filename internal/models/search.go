@@ -7,13 +7,13 @@ type SearchResult struct {
 	Score  float64 `json:"score"`
 }
 
-type SearchRequest struct {
+type SearchByEmbbedingRequest struct {
 	Embedding []float64         `json:"embedding"`
 	Limit     int               `json:"limit,omitempty"`
 	Metadata  map[string]string `json:"metadata,omitempty"`
 }
 
-func (sr *SearchRequest) Validate() error {
+func (sr *SearchByEmbbedingRequest) Validate() error {
 	if len(sr.Embedding) == 0 {
 		return fmt.Errorf("embedding cannot be empty")
 	}
@@ -21,4 +21,26 @@ func (sr *SearchRequest) Validate() error {
 		sr.Limit = 10
 	}
 	return nil
+}
+
+type SearchByTextRequest struct {
+	Text            string `json:"text"`
+	Limit           int    `json:"limit,omitempty"`
+	Namespace       string `json:"namespace,omitempty"`
+	ReturnEmbedding bool   `json:"return_embedding,omitempty"`
+}
+
+func (st *SearchByTextRequest) Validate() error {
+	if len(st.Text) == 0 {
+		return fmt.Errorf("text field cannot be empty")
+	}
+	if st.Limit <= 0 {
+		st.Limit = 10
+	}
+	switch st.Namespace {
+	case "", "quotes", "general":
+		return nil
+	default:
+		return fmt.Errorf("invalid namespace: %s", st.Namespace)
+	}
 }

@@ -1,8 +1,11 @@
 package models
 
 import (
+	"fmt"
 	"math"
 	"time"
+
+	"github.com/pborman/uuid"
 )
 
 type Quote struct {
@@ -12,10 +15,23 @@ type Quote struct {
 
 type Vector struct {
 	ID        string            `json:"id"`
-	Embedding []float64         `json:"embedding"`
+	Embedding []float64         `json:"embedding,omitempty"`
 	Metadata  map[string]string `json:"metadata,omitempty"`
 	CreatedAt time.Time         `json:"created_at"`
 	UpdatedAt time.Time         `json:"updated_at"`
+}
+
+func (v *Vector) Validate() error {
+
+	if len(v.Embedding) == 0 {
+		return fmt.Errorf("embedding cannot be empty")
+	}
+
+	if v.ID == "" {
+		v.ID = uuid.New()
+	}
+
+	return nil
 }
 
 func (v *Vector) CosineSimilarity(other *Vector) float64 {
