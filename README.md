@@ -161,3 +161,9 @@ go run ./cmd/test-embedder
 1. Implement the `embedders.Embedder` interface
 2. Add your implementation to `internal/embedders/quotes/`
 3. Update the server initialization in `internal/server/server.go`
+
+---
+### Contributing
+
+We welcome contributions - Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+ for details.
