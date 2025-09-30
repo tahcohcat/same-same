@@ -24,27 +24,7 @@ type Server struct {
 func NewServer() *Server {
 	storage := memory.NewStorage()
 
-	embedderType := os.Getenv("EMBEDDER_TYPE")
-	var embedder embedders.Embedder
-
-	switch embedderType {
-	case "gemini":
-		googleAPIKey := os.Getenv("GEMINI_API_KEY")
-		if googleAPIKey == "" {
-			log.Fatal("GEMINI_API_KEY environment variable is required")
-		}
-		embedder = gemini.NewGeminiEmbedder(googleAPIKey)
-	case "huggingface":
-		hfAPIKey := os.Getenv("HUGGINGFACE_API_KEY")
-		if hfAPIKey == "" {
-			log.Fatal("HUGGINGFACE_API_KEY environment variable is required")
-		}
-		embedder = huggingface.NewHuggingFaceEmbedder(hfAPIKey)
-	default:
-		embedder = tfidf.NewTFIDFEmbedder()
-	}
-
-	handler := handlers.NewVectorHandler(storage, embedder)
+	handler := handlers.NewVectorHandler(storage, CreateEmbedder(os.Getenv("EMBEDDER_TYPE")))
 	router := mux.NewRouter()
 
 	server := &Server{
@@ -70,6 +50,7 @@ func (s *Server) setupRoutes() {
 	api.HandleFunc("/vectors/{id}", s.handler.DeleteVector).Methods("DELETE")
 	api.HandleFunc("/vectors/search", s.handler.SearchVectors).Methods("POST")
 	api.HandleFunc("/search", s.handler.SearchByText).Methods("POST")
+	api.HandleFunc("/search", s.handler.AdvancedSearch).Methods("POST")
 
 	s.router.HandleFunc("/health", s.healthCheck).Methods("GET")
 }
@@ -83,4 +64,24 @@ func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
 func (s *Server) Start(addr string) error {
 	log.Printf("starting server on :%s", addr)
 	return http.ListenAndServe(addr, s.router)
+}
+
+func CreateEmbedder(eType string) embedders.Embedder {
+
+	switch eType {
+	case "gemini":
+		googleAPIKey := os.Getenv("GEMINI_API_KEY")
+		if googleAPIKey == "" {
+			log.Fatal("GEMINI_API_KEY environment variable is required")
+		}
+		return gemini.NewGeminiEmbedder(googleAPIKey)
+	case "huggingface":
+		hfAPIKey := os.Getenv("HUGGINGFACE_API_KEY")
+		if hfAPIKey == "" {
+			log.Fatal("HUGGINGFACE_API_KEY environment variable is required")
+		}
+		return huggingface.NewHuggingFaceEmbedder(hfAPIKey)
+	default:
+		return tfidf.NewTFIDFEmbedder()
+	}
 }

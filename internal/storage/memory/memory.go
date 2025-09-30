@@ -118,14 +118,13 @@ func (ms *Storage) Search(req *models.SearchByEmbbedingRequest) ([]*models.Searc
 			continue
 		}
 
-		//todo: rethink the criteria for metadata filtering
-		// if req.Metadata != nil && !matchesMetadata(vector.Metadata, req.Metadata) {
-		// 	ctxLog.WithFields(logrus.Fields{
-		// 		"skipped_vector_id": vector.ID,
-		// 		"skipped_vector_metadata": vector.Metadata,
-		// 	}).Debug("skipping vector due to metadata mismatch")
-		// 	continue
-		// }
+		if len(req.Filters) > 0 && !matchesAdvancedFilters(vector.Metadata, req.Filters) {
+			ctxLog.WithFields(logrus.Fields{
+				"skipped_vector_id":       vector.ID,
+				"skipped_vector_metadata": vector.Metadata,
+			}).Debug("skipping vector due to metadata mismatch")
+			continue
+		}
 
 		score := queryVector.CosineSimilarity(vector)
 		results = append(results, &models.SearchResult{
@@ -156,4 +155,96 @@ func matchesMetadata(vectorMeta, queryMeta map[string]string) bool {
 		}
 	}
 	return true
+}
+
+// Advanced filter support
+func matchesAdvancedFilters(vectorMeta map[string]string, filters []models.MetadataFilter) bool {
+	for _, filter := range filters {
+		val, ok := vectorMeta[filter.Field]
+		if !ok {
+			return false
+		}
+		switch filter.Operator {
+		case "=":
+			if val != fmt.Sprintf("%v", filter.Value) {
+				return false
+			}
+		case "in":
+			arr, ok := filter.Value.([]interface{})
+			if !ok {
+				return false
+			}
+			found := false
+			for _, v := range arr {
+				if val == fmt.Sprintf("%v", v) {
+					found = true
+					break
+				}
+			}
+			if !found {
+				return false
+			}
+		case "not_in":
+			arr, ok := filter.Value.([]interface{})
+			if !ok {
+				return false
+			}
+			for _, v := range arr {
+				if val == fmt.Sprintf("%v", v) {
+					return false
+				}
+			}
+		case ">=":
+			if !compareNumeric(val, filter.Value, ">=") {
+				return false
+			}
+		case "<=":
+			if !compareNumeric(val, filter.Value, "<=") {
+				return false
+			}
+		case ">":
+			if !compareNumeric(val, filter.Value, ">") {
+				return false
+			}
+		case "<":
+			if !compareNumeric(val, filter.Value, "<") {
+				return false
+			}
+		default:
+			return false
+		}
+	}
+	return true
+}
+
+func compareNumeric(a string, b interface{}, op string) bool {
+	var af, bf float64
+	_, err := fmt.Sscanf(a, "%f", &af)
+	if err != nil {
+		return false
+	}
+	switch v := b.(type) {
+	case float64:
+		bf = v
+	case int:
+		bf = float64(v)
+	case string:
+		_, err := fmt.Sscanf(v, "%f", &bf)
+		if err != nil {
+			return false
+		}
+	default:
+		return false
+	}
+	switch op {
+	case ">=":
+		return af >= bf
+	case "<=":
+		return af <= bf
+	case ">":
+		return af > bf
+	case "<":
+		return af < bf
+	}
+	return false
 }

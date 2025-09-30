@@ -213,7 +213,7 @@ func (vh *VectorHandler) SearchByText(w http.ResponseWriter, r *http.Request) {
 	results, err := vh.storage.Search(&models.SearchByEmbbedingRequest{
 		Embedding: embedding,
 		Limit:     req.Limit,
-		Metadata:  map[string]string{"type": req.Namespace},
+		Filters:   req.MetadataFilters,
 	})
 
 	if err != nil {

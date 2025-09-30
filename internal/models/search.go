@@ -8,9 +8,17 @@ type SearchResult struct {
 }
 
 type SearchByEmbbedingRequest struct {
-	Embedding []float64         `json:"embedding"`
-	Limit     int               `json:"limit,omitempty"`
-	Metadata  map[string]string `json:"metadata,omitempty"`
+	Embedding []float64 `json:"embedding"`
+	Limit     int       `json:"limit,omitempty"`
+
+	Filters []MetadataFilter `json:"filters,omitempty"`
+}
+
+// MetadataFilter supports advanced filtering
+type MetadataFilter struct {
+	Field    string      `json:"field"`
+	Operator string      `json:"operator"` // =, in, not_in, >=, <=, >, <
+	Value    interface{} `json:"value"`
 }
 
 func (sr *SearchByEmbbedingRequest) Validate() error {
@@ -24,10 +32,13 @@ func (sr *SearchByEmbbedingRequest) Validate() error {
 }
 
 type SearchByTextRequest struct {
-	Text            string `json:"text"`
-	Limit           int    `json:"limit,omitempty"`
-	Namespace       string `json:"namespace,omitempty"`
-	ReturnEmbedding bool   `json:"return_embedding,omitempty"`
+	Text      string `json:"text"`
+	Limit     int    `json:"limit,omitempty"`
+	Namespace string `json:"namespace,omitempty"`
+
+	MetadataFilters []MetadataFilter `json:"metadata_filters,omitempty"`
+
+	ReturnEmbedding bool `json:"return_embedding,omitempty"`
 }
 
 func (st *SearchByTextRequest) Validate() error {

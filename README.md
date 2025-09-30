@@ -17,7 +17,9 @@
 [![grafana](https://img.shields.io/badge/Grafana-F2F4F9?style=for-the-badge&logo=grafana&logoColor=orange&labelColor=F2F4F9
 )](https://grafana.com/)
 
-A lightweight RESTful microservice for storing and searching vectors using cosine similarity, with built-in embedding generation for quotes.
+A lightweight RESTful microservice for storing and searching vectors using cosine similarity, with built-in embedding generation for text.
+
+Designed and optimised for quick prototyping and exploration of the vector space with the minimal necessary setup requirements.
 
 ## Features
 
@@ -30,7 +32,7 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
   - Google Gemini API
   - HuggingFace API
 - Quote-specific endpoints for easy text vectorization
-- Metadata filtering and search
+- Advanced [metadata filtering and search](ADVANCED_SEARCH_USAGE.md)
 - Pluggable embedder interface (local TF-IDF, Gemini, HuggingFace)
 - JSON API responses
 
