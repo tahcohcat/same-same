@@ -6,29 +6,31 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
-
-	"github/tahcohcat/same-same/internal/embedders"
-	"github/tahcohcat/same-same/internal/embedders/quotes/gemini"
-	"github/tahcohcat/same-same/internal/embedders/quotes/huggingface"
-	"github/tahcohcat/same-same/internal/embedders/quotes/local/tfidf"
-	"github/tahcohcat/same-same/internal/handlers"
-	"github/tahcohcat/same-same/internal/storage/memory"
+	"github.com/tahcohcat/same-same/internal/embedders"
+	"github.com/tahcohcat/same-same/internal/embedders/quotes/gemini"
+	"github.com/tahcohcat/same-same/internal/embedders/quotes/huggingface"
+	"github.com/tahcohcat/same-same/internal/embedders/quotes/local/tfidf"
+	"github.com/tahcohcat/same-same/internal/handlers"
+	"github.com/tahcohcat/same-same/internal/storage"
 )
 
 type Server struct {
-	storage *memory.Storage
+	storage storage.Storage
 	handler *handlers.VectorHandler
 	router  *mux.Router
 }
 
 func NewServer() *Server {
-	storage := memory.NewStorage()
+	store, err := storage.NewStorageFromEnv()
+	if err != nil {
+		log.Fatalf("failed to initialize storage adapter: %v", err)
+	}
 
-	handler := handlers.NewVectorHandler(storage, CreateEmbedder(os.Getenv("EMBEDDER_TYPE")))
+	handler := handlers.NewVectorHandler(store, CreateEmbedder(os.Getenv("EMBEDDER_TYPE")))
 	router := mux.NewRouter()
 
 	server := &Server{
-		storage: storage,
+		storage: store,
 		handler: handler,
 		router:  router,
 	}

@@ -8,17 +8,17 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github/tahcohcat/same-same/internal/embedders"
-	"github/tahcohcat/same-same/internal/models"
-	"github/tahcohcat/same-same/internal/storage/memory"
+	"github.com/tahcohcat/same-same/internal/embedders"
+	"github.com/tahcohcat/same-same/internal/models"
+	"github.com/tahcohcat/same-same/internal/storage"
 )
 
 type VectorHandler struct {
-	storage  *memory.Storage
+	storage  storage.Storage
 	embedder embedders.Embedder
 }
 
-func NewVectorHandler(storage *memory.Storage, embedder embedders.Embedder) *VectorHandler {
+func NewVectorHandler(storage storage.Storage, embedder embedders.Embedder) *VectorHandler {
 	return &VectorHandler{
 		storage:  storage,
 		embedder: embedder,

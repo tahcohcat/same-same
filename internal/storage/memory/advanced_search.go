@@ -1,8 +1,9 @@
 package memory
 
 import (
-	"github/tahcohcat/same-same/internal/models"
 	"sort"
+
+	"github.com/tahcohcat/same-same/internal/models"
 
 	"github.com/sirupsen/logrus"
 )

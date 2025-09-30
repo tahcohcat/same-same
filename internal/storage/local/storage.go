@@ -110,10 +110,8 @@ func (ls *LocalStorage) loadOrCreateSchema() error {
 }
 
 // saveSchema persists the schema to disk
+// saveSchema persists the schema to disk. Caller must hold the lock.
 func (ls *LocalStorage) saveSchema() error {
-	ls.mu.Lock()
-	defer ls.mu.Unlock()
-
 	ls.schema.UpdatedAt = time.Now()
 
 	metadataPath := filepath.Join(ls.basePath, MetadataFile)
@@ -161,6 +159,7 @@ func (ls *LocalStorage) CreateCollection(name, description string, schema *Colle
 		return nil, err
 	}
 
+	// Already holding lock
 	if err := ls.saveSchema(); err != nil {
 		return nil, err
 	}
@@ -244,6 +243,7 @@ func (ls *LocalStorage) StoreDocument(collectionName string, doc *Document) erro
 		}
 	}
 
+	// Already holding lock
 	if err := ls.saveSchema(); err != nil {
 		return err
 	}
@@ -421,6 +421,7 @@ func (ls *LocalStorage) DeleteDocument(collectionName, docID string) error {
 	collection.Stats.DocumentCount = len(collection.Documents)
 	collection.Stats.LastUpdated = time.Now()
 
+	// Already holding lock
 	return ls.saveSchema()
 }
 
@@ -492,9 +493,10 @@ func (ls *LocalStorage) Import(collectionName, inputPath string) error {
 
 	ls.mu.Lock()
 	ls.schema.Collections[collectionName] = &collection
+	// Already holding lock
+	err = ls.saveSchema()
 	ls.mu.Unlock()
-
-	return ls.saveSchema()
+	return err
 }
 
 // Close closes the storage

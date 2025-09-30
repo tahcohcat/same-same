@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github/tahcohcat/same-same/internal/server"
+	"github.com/tahcohcat/same-same/internal/server"
 
 	"github.com/sirupsen/logrus"
 )

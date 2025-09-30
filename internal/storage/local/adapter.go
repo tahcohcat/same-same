@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github/tahcohcat/same-same/internal/models"
+	"github.com/tahcohcat/same-same/internal/models"
+	"github.com/tahcohcat/same-same/internal/storage/search"
 )
 
 // VectorStorageAdapter adapts LocalStorage to work with existing Vector storage interface
@@ -178,6 +179,65 @@ func (vsa *VectorStorageAdapter) Search(req *models.SearchByEmbbedingRequest) ([
 		results = results[:req.TopK]
 	}
 
+	return results, nil
+}
+
+func (vsa *VectorStorageAdapter) AdvancedSearch(req *models.AdvancedSearchRequest, queryEmbedding []float64) ([]*models.SearchResult, error) {
+
+	// Use shared search utility
+	vectors := []*models.Vector{}
+	collection, err := vsa.localStorage.GetCollection(vsa.collection)
+	if err != nil {
+		return nil, err
+	}
+
+	
+	results := make([]*models.SearchResult, 0)
+
+	for _, doc := range collection.Documents {
+		if doc.Embedding == nil {
+			continue
+		}
+
+		// Load embedding if stored separately
+		if len(doc.Embedding.Vector) == 0 && doc.Embedding.Path != "" {
+			embedding, err := vsa.localStorage.loadEmbedding(vsa.collection, doc.ID)
+			if err != nil {
+				continue
+			}
+			doc.Embedding = embedding
+		}
+
+		vector := documentToVector(doc)
+		vectors = append(vectors, vector)
+	}
+
+	// Convert req.Filters (map[string]models.FilterExpr) to []models.MetadataFilter
+	var metadataFilters []models.MetadataFilter
+	for key, expr := range req.Filters {
+
+		// Assuming expr is of type models.FilterExpr (likely a struct or map), extract the operator as string.
+		// If expr is a struct with a field "Operator", use expr.Operator.
+		// If expr is a map, extract the operator string value (e.g., expr["operator"].(string)).
+		// Here, let's assume expr is a struct with an Operator field.
+		var operator string
+		if op, ok := expr["operator"]; ok {
+			operator, _ = op.(string)
+		}
+		metadataFilters = append(metadataFilters, models.MetadataFilter{
+			Field:    key,
+			Operator: operator,
+		})
+	}
+
+	advancedReq := &models.SearchByEmbbedingRequest{
+		Embedding: queryEmbedding,
+		TopK:      req.TopK,
+		Filters:   metadataFilters,
+		Options:   req.Options,
+	}
+
+	results = search.FilterAndScoreVectors(vectors, advancedReq)
 	return results, nil
 }
 

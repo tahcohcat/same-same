@@ -50,7 +50,7 @@ data/
 ### 1. Basic Setup
 
 ```go
-import "github/tahcohcat/same-same/internal/storage/local"
+import "github.com/tahcohcat/same-same/internal/storage/local"
 
 // Create local storage
 storage, err := local.NewLocalStorage("./data/storage")

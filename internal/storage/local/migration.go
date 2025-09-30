@@ -3,7 +3,7 @@ package local
 import (
 	"fmt"
 
-	"github/tahcohcat/same-same/internal/storage/memory"
+	"github.com/tahcohcat/same-same/internal/storage/memory"
 
 	"github.com/sirupsen/logrus"
 )

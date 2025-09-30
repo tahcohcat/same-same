@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"time"
 
-	"github/tahcohcat/same-same/internal/embedders"
+	"github.com/tahcohcat/same-same/internal/embedders"
 
 	"github.com/sirupsen/logrus"
 )
@@ -66,13 +66,11 @@ func (g *GeminiEmbedder) Embed(text string) ([]float64, error) {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	
 	u, err := url.Parse(g.baseURL)
 	if err != nil {
 		panic(err)
 	}
 
-	
 	q := u.Query()
 	q.Set("key", g.apiKey)
 	u.RawQuery = q.Encode()
@@ -81,7 +79,6 @@ func (g *GeminiEmbedder) Embed(text string) ([]float64, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-
 
 	logrus.WithField("google-api-key", g.apiKey).Infof("Sending request to Gemini API: %s", u.String())
 

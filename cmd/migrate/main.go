@@ -4,8 +4,9 @@ import (
 	"flag"
 	"log"
 
-	"github/tahcohcat/same-same/internal/storage/local"
-	"github/tahcohcat/same-same/internal/storage/memory"
+	"github.com/tahcohcat/same-same/internal/storage/memory"
+
+	"github.com/tahcohcat/same-same/internal/storage/local"
 )
 
 func main() {

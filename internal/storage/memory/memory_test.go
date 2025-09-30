@@ -1,7 +1,7 @@
 package memory
 
 import (
-	"github/tahcohcat/same-same/internal/models"
+	"github.com/tahcohcat/same-same/internal/models"
 
 	"testing"
 )
@@ -39,7 +39,7 @@ func TestSearchBasic(t *testing.T) {
 
 	req := &models.SearchByEmbbedingRequest{
 		Embedding: []float64{1, 0, 0},
-		Limit:     2,
+		TopK:      2,
 	}
 	results, err := store.Search(req)
 	if err != nil {

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github/tahcohcat/same-same/internal/embedders/quotes/huggingface"
+	"github.com/tahcohcat/same-same/internal/embedders/quotes/huggingface"
 )
 
 func main() {
@@ -15,9 +15,9 @@ func main() {
 	}
 
 	embedder := huggingface.NewHuggingFaceEmbedder(apiKey)
-	
+
 	quote := "The only way to do great work is to love what you do. - Steve Jobs"
-	
+
 	embedding, err := embedder.Embed(quote)
 	if err != nil {
 		log.Fatalf("Failed to embed quote: %v", err)

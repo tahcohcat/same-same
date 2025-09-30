@@ -1,8 +1,11 @@
-module github/tahcohcat/same-same
+module github.com/tahcohcat/same-same
 
 go 1.25
 
-require github.com/gorilla/mux v1.8.0
+require (
+	github.com/gorilla/mux v1.8.0
+	github.com/joho/godotenv v1.5.1
+)
 
 require github.com/google/uuid v1.0.0 // indirect
 

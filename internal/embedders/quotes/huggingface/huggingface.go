@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github/tahcohcat/same-same/internal/embedders"
+	"github.com/tahcohcat/same-same/internal/embedders"
 )
 
 type EmbeddingRequest struct {

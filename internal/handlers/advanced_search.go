@@ -3,8 +3,9 @@ package handlers
 
 import (
 	"encoding/json"
-	"github/tahcohcat/same-same/internal/models"
 	"net/http"
+
+	"github.com/tahcohcat/same-same/internal/models"
 )
 
 // AdvancedSearchResponse matches the API specification

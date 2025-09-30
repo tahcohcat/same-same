@@ -38,7 +38,7 @@ Designed and optimised for quick prototyping and exploration of the vector space
 - JSON API responses
 
 
-## 🚀 Getting Started 
+## Getting Started 
 
 
 This section will help you get up and running with the Same-Same Vector DB running on localhost:8080. By default, the system uses a local TF-IDF embedder, which requires no external API keys or dependencies. You can also use Google Gemini or HuggingFace by setting the EMBEDDER_TYPE environment variable.

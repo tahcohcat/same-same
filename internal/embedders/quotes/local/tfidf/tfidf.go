@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github/tahcohcat/same-same/internal/embedders"
+	"github.com/tahcohcat/same-same/internal/embedders"
 )
 
 // TFIDFEmbedder implements a local TF-IDF based embedder
