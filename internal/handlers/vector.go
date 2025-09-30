@@ -198,8 +198,8 @@ func (vh *VectorHandler) SearchByText(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.Limit == 0 {
-		req.Limit = 5
+	if req.TopK == 0 {
+		req.TopK = 5
 	}
 
 	// 1. Embed the text
@@ -212,7 +212,7 @@ func (vh *VectorHandler) SearchByText(w http.ResponseWriter, r *http.Request) {
 	// 2. Run similarity search
 	results, err := vh.storage.Search(&models.SearchByEmbbedingRequest{
 		Embedding: embedding,
-		Limit:     req.Limit,
+		TopK:      req.TopK,
 		Filters:   req.MetadataFilters,
 	})
 

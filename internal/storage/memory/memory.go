@@ -139,8 +139,8 @@ func (ms *Storage) Search(req *models.SearchByEmbbedingRequest) ([]*models.Searc
 		return results[i].Score > results[j].Score
 	})
 
-	if req.Limit > 0 && len(results) > req.Limit {
-		results = results[:req.Limit]
+	if req.TopK > 0 && len(results) > req.TopK {
+		results = results[:req.TopK]
 	}
 
 	ctxLog.WithField("returned_vectors", len(results)).Debug("results limited")

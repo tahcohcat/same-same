@@ -22,8 +22,9 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
 Designed and optimised for quick prototyping and exploration of the vector space with the minimal necessary setup requirements.
 
 ## Features
-
-- In-memory vector storage with thread safety
+- Local storage
+  - In-memory vector storage with thread safety
+  - [Local file system storage](LOCAL_FILE_STORAGE.md)
 - RESTful API for CRUD operations
 - Vector similarity search using cosine similarity
 
