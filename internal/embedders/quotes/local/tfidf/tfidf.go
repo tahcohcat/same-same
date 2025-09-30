@@ -156,14 +156,30 @@ func (t *TFIDFEmbedder) AddDocuments(texts []string) {
 
 // Embed converts text to TF-IDF vector
 func (t *TFIDFEmbedder) Embed(text string) ([]float64, error) {
-	t.mu.RLock()
-	defer t.mu.RUnlock()
+	t.mu.Lock() // Use write lock for potential vocabulary building
+	defer t.mu.Unlock()
 
-	// If no vocabulary built yet, use the current text to bootstrap
+	// Bootstrap vocabulary if empty
 	if len(t.vocabulary) == 0 {
-		t.mu.RUnlock()
-		t.AddDocument(text)
-		t.mu.RLock()
+		// Build initial vocabulary with common terms and current text
+		bootstrapDocs := []string{
+			text, // Current text
+			// Common meaningful words to bootstrap vocabulary
+			"life work time people world way things make know think feel see",
+			"love good great true real best better never always friend",
+			"success failure happiness wisdom knowledge learning education",
+			"truth justice freedom equality peace war change progress",
+		}
+		t.documents = append(t.documents, bootstrapDocs...)
+		t.buildVocabulary()
+	} else {
+		// Add document to corpus for future vocabulary updates
+		t.documents = append(t.documents, text)
+
+		// Rebuild vocabulary periodically
+		if len(t.documents)%50 == 0 {
+			t.buildVocabulary()
+		}
 	}
 
 	words := t.preprocessText(text)
@@ -207,6 +223,12 @@ func (t *TFIDFEmbedder) Embed(text string) ([]float64, error) {
 	if norm > 0 {
 		for i := range embedding {
 			embedding[i] /= norm
+		}
+	} else {
+		// If still zero, create a minimal non-zero embedding
+		// This ensures we never return all zeros
+		for i := range embedding {
+			embedding[i] = 1.0 / math.Sqrt(float64(len(embedding)))
 		}
 	}
 

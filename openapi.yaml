@@ -150,6 +150,90 @@ paths:
                       $ref: '#/components/schemas/SearchResult'
         '400':
           description: Invalid request
+  /api/v1/search/temporal:
+  post:
+    summary: Temporal-aware vector search with time decay
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - query
+            properties:
+              query:
+                type: string
+                description: Search query text
+              top_k:
+                type: integer
+                default: 10
+                description: Number of results to return
+              temporal_decay:
+                type: string
+                enum: [strong, medium, weak, none]
+                default: none
+                description: Temporal decay strength
+              reference_time:
+                type: string
+                format: date-time
+                description: Reference time for decay calculation (defaults to now)
+              time_field:
+                type: string
+                default: created_at
+                description: Metadata field containing timestamp
+              filters:
+                type: object
+                description: Metadata filters
+              options:
+                type: object
+                properties:
+                  hybrid_weight:
+                    type: object
+                    properties:
+                      vector:
+                        type: number
+                      metadata:
+                        type: number
+    responses:
+      '200':
+        description: Temporal search results
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      vector:
+                        $ref: '#/components/schemas/Vector'
+                      score:
+                        type: number
+                        description: Final score with decay
+                      base_score:
+                        type: number
+                        description: Original cosine similarity
+                      decay_factor:
+                        type: number
+                        description: Temporal decay multiplier
+                      document_time:
+                        type: string
+                        format: date-time
+                      age:
+                        type: string
+                        description: Human-readable age
+                total:
+                  type: integer
+                query:
+                  type: string
+                decay:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
   /api/v1/vectors/count:
     get:
       summary: Get total number of vectors in database

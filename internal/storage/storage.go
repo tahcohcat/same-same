@@ -14,4 +14,5 @@ type Storage interface {
 	Count() int
 	Search(req *models.SearchByEmbbedingRequest) ([]*models.SearchResult, error)
 	AdvancedSearch(req *models.AdvancedSearchRequest, queryEmbedding []float64) ([]*models.SearchResult, error)
+	TemporalSearch(req *models.TemporalSearchRequest, queryEmbedding []float64) ([]*models.TemporalSearchResult, error)
 }
