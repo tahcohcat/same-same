@@ -21,13 +21,13 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
 
 Designed and optimized for quick prototyping and exploration of the vector space with minimal setup requirements.
 
-## ✨ Features
+## Features
 
-### 🗄️ Storage Options
+### Storage Options
 - **In-memory vector storage** with thread safety (default)
 - **[Local file system storage](LOCAL_FILE_STORAGE.md)** with schema-driven persistence, metadata indexing, and multimodal support
 
-### 🎨 Multimodal Embedding Support
+### Multimodal Embedding Support
 - **CLIP** - Embed images and text into the same vector space for cross-modal search (Pure Go, no Python!)
 - **Text Embedders**: 
   - Local TF-IDF (default, no external dependencies)
@@ -35,7 +35,7 @@ Designed and optimized for quick prototyping and exploration of the vector space
   - HuggingFace API
 - **Search images with text queries** and vice versa
 
-### 🚀 Core Features
+### Core Features
 - RESTful API for CRUD operations
 - Vector similarity search using cosine similarity
 - Advanced [metadata filtering and search](ADVANCED_SEARCH_USAGE.md)
@@ -43,15 +43,15 @@ Designed and optimized for quick prototyping and exploration of the vector space
 - Pluggable embedder interface
 - JSON API responses
 
-## 📚 Documentation
+## Documentation
 
- * 🔑 [General Usage Documentation](USAGE.md)
- * 📥 [Data Ingestion Guide](INGESTION_GUIDE.md)
- * 🖼️ [Image Embedding with CLIP](IMAGE_EMBEDDING_GUIDE.md)
- * 🏗️ [Cobra CLI Migration Guide](COBRA_MIGRATION.md)
- * 📖 [OpenAPI Specification](USAGE.md#openapi-specification)
+ * [General Usage Documentation](USAGE.md)
+ * [Data Ingestion Guide](INGESTION_GUIDE.md)
+ * [Image Embedding with CLIP](IMAGE_EMBEDDING_GUIDE.md)
+ * [Cobra CLI Migration Guide](COBRA_MIGRATION.md)
+ * [OpenAPI Specification](USAGE.md#openapi-specification)
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -110,7 +110,7 @@ curl -X POST http://localhost:8080/api/v1/search \
   -d '{"text": "sunset over ocean", "limit": 10}'
 ```
 
-## 💡 CLI Commands
+## CLI Commands
 
 Same-Same provides a unified CLI powered by [Cobra](https://github.com/spf13/cobra):
 
@@ -149,11 +149,11 @@ same-same ingest -e clip -n vacation images:./trip # With namespace
 - `--dry-run` - Perform dry run without making changes
 - `--version` - Show version
 
-## 🎯 Image Embedding (Pure Go!)
+## Image Embedding (Pure Go)
 
 Same-Same supports **multimodal embeddings** using CLIP - embed both images and text into the same vector space.
 
-**✅ No Python Required!** The default CLIP embedder is pure Go with zero external dependencies.
+**No Python Required!** The default CLIP embedder is pure Go with zero external dependencies.
 
 ```bash
 # Ingest images - works out of the box!
@@ -177,7 +177,7 @@ same-same ingest -e clip --clip-model ViT-L-14 images:./photos
 
 See [IMAGE_EMBEDDING_GUIDE.md](IMAGE_EMBEDDING_GUIDE.md) for detailed documentation.
 
-## 📊 Data Ingestion Sources
+## Data Ingestion Sources
 
 ### Built-in Datasets
 ```bash
@@ -215,7 +215,7 @@ same-same ingest -e clip image-list:list.txt      # From list file
 
 Supported formats: JPEG, PNG, GIF, BMP, WebP
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Vectors
 - `POST /api/v1/vectors/embed` - Create vector from text (auto-generates embedding)
@@ -261,7 +261,7 @@ curl -X POST http://localhost:8080/api/v1/vectors \
   }'
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ### System Architecture
 
@@ -379,7 +379,7 @@ type MultiModalEmbedder interface {
 - **HuggingFace** (API) - Text only
 - **CLIP** (Pure Go or Python) - Text + Images
 
-## 🛠️ Environment Variables
+## Environment Variables
 
 ```bash
 # Embedder selection (optional, defaults to local)
@@ -393,7 +393,7 @@ export HUGGINGFACE_API_KEY=your_key
 export CLIP_USE_PYTHON=true       # Use Python OpenCLIP for higher accuracy
 ```
 
-## 🔬 Development
+## Development
 
 ### Build
 
@@ -456,7 +456,7 @@ func (m *MyEmbedder) Name() string {
 }
 ```
 
-## 🐳 Docker
+## Docker
 
 ```bash
 # Build image
@@ -478,7 +478,7 @@ docker run -d \
   same-same
 ```
 
-## 📈 Performance
+## Performance
 
 ### Ingestion Speed
 
@@ -497,7 +497,7 @@ docker run -d \
 | Memory | Fastest | No | Development, testing |
 | Local File | Fast | Yes | Production, single instance |
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
@@ -509,7 +509,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 4. Run tests: `go test ./...`
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -520,12 +520,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Google Gemini](https://ai.google.dev/gemini-api/docs/embeddings) for embeddings API
 - [HuggingFace](https://huggingface.co/) for dataset and embeddings access
 
-## 📞 Support
+## Support
 
-- 📖 Documentation: [View all guides](/)
-- 🐛 Issues: [GitHub Issues](https://github.com/tahcohcat/same-same/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/tahcohcat/same-same/discussions)
+- Documentation: [View all guides](/)
+- Issues: [GitHub Issues](https://github.com/tahcohcat/same-same/issues)
+- Discussions: [GitHub Discussions](https://github.com/tahcohcat/same-same/discussions)
 
 ---
 
-**Made with ❤️ for the vector search community**
+**Made with love for the vector search community**
