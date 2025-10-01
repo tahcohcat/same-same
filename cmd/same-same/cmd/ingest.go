@@ -30,6 +30,9 @@ var (
 	embedderType string
 	timeout      time.Duration
 	output       string
+	recursive    bool
+	clipModel    string
+	clipPretrain string
 )
 
 func init() {
@@ -212,8 +215,25 @@ func createEmbedder(embedderType string) (embedders.Embedder, error) {
 		}
 		return huggingface.NewHuggingFaceEmbedder(apiKey), nil
 
+	case "clip":
+		// Check if using Python-based CLIP or simple Go-based
+		if os.Getenv("CLIP_USE_PYTHON") == "true" {
+			embedder := clip.NewCLIPEmbedder(clipModel, clipPretrain)
+			if verbose {
+				fmt.Printf("Using Python CLIP model: %s with pretrained: %s\n", clipModel, clipPretrain)
+			}
+			return embedder, nil
+		} else {
+			// Use simple Go-based embedder (no Python required!)
+			embedder := clip.NewSimpleCLIPEmbedder()
+			if verbose {
+				fmt.Printf("Using Simple CLIP embedder (pure Go, no Python required)\n")
+			}
+			return embedder, nil
+		}
+
 	default:
-		return nil, fmt.Errorf("unknown embedder type: %s (supported: local, gemini, huggingface)", embedderType)
+		return nil, fmt.Errorf("unknown embedder type: %s (supported: local, gemini, huggingface, clip)", embedderType)
 	}
 }
 
