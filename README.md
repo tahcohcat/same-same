@@ -22,12 +22,11 @@ A lightweight RESTful microservice for storing and searching vectors using cosin
 Designed and optimised for quick prototyping and exploration of the vector space with the minimal necessary setup requirements.
 
 ## Features
-- Local storage
-  - In-memory vector storage with thread safety
-  - [Local file system storage](LOCAL_FILE_STORAGE.md)
+- **Dual Storage Options**
+  - In-memory vector storage with thread safety (default)
+  - [Local file system storage](LOCAL_FILE_STORAGE.md) with schema-driven persistence, metadata indexing, and multimodal support
 - RESTful API for CRUD operations
 - Vector similarity search using cosine similarity
-
 - Automatic embedding generation using:
   - Local TF-IDF embedder (default, no external dependencies)
   - Google Gemini API
@@ -40,8 +39,9 @@ Designed and optimised for quick prototyping and exploration of the vector space
 
 ## Getting Started 
 
-
 This section will help you get up and running with the Same-Same Vector DB running on localhost:8080. By default, the system uses a local TF-IDF embedder, which requires no external API keys or dependencies. You can also use Google Gemini or HuggingFace by setting the EMBEDDER_TYPE environment variable.
+
+> **Quick Start with Ingestion:** For a faster way to load data, see the [Data Ingestion Guide](INGESTION_GUIDE.md) which provides a CLI tool to import data from built-in datasets, HuggingFace, CSV, and JSONL files.
 
 ### Step 1: Start the Vector Database
 
@@ -112,8 +112,9 @@ curl -s "http://localhost:8081/api/v1/search" \
 }
 ```
 
-For more ideas and other usage documentation see the more general guide:
+For more ideas and other usage documentation see the guides:
  * 🔑 [General Usage Documentation](USAGE.md)
+ * 📥 [Data Ingestion Guide](INGESTION_GUIDE.md)
  * 📖 [OpenAPI Specification Section](USAGE.md#openapi-specification)
 
 ## API Endpoints
@@ -270,11 +271,14 @@ internal/
 │   ├── embedder.go     # Main interface
 │   └── quotes/
 │       ├── gemini/     # Google Gemini implementation
-│       └── huggingface/# HuggingFace implementation
+│       ├── huggingface/# HuggingFace implementation
+│       └── local/      # Local TF-IDF implementation
 ├── handlers/           # HTTP request handlers
 ├── models/             # Data structures (Vector, Quote)
 ├── server/             # HTTP server setup
-└── storage/            # In-memory vector storage
+└── storage/
+    ├── memory/         # In-memory vector storage (default)
+    └── local/          # Local file system storage with persistence
 ```
 
 ## Development
