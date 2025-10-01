@@ -117,6 +117,47 @@ For more ideas and other usage documentation see the guides:
  * 📥 [Data Ingestion Guide](INGESTION_GUIDE.md)
  * 📖 [OpenAPI Specification Section](USAGE.md#openapi-specification)
 
+## CLI Commands
+
+Same-Same provides a unified CLI with subcommands:
+
+### Available Commands
+
+```bash
+# Show all available commands
+same-same --help
+
+# Start the server
+same-same serve [flags]
+
+# Ingest data from various sources
+same-same ingest <source> [flags]
+```
+
+### Common Usage
+
+```bash
+# Start server on default port
+same-same serve
+
+# Start server with debug logging
+same-same serve -d -a :9000
+
+# Ingest built-in dataset
+same-same ingest demo
+
+# Ingest with custom namespace and verbose output
+same-same ingest -n quotes -v demo
+
+# Ingest CSV file
+same-same ingest --text-col description data.csv
+
+# Ingest HuggingFace dataset
+same-same ingest hf:imdb --split train --sample 1000
+```
+
+For detailed ingestion options, see the [Data Ingestion Guide](INGESTION_GUIDE.md).
+
 ## API Endpoints
 
 ### Vectors
@@ -195,7 +236,12 @@ export HUGGINGFACE_API_KEY=your_huggingface_api_key_here
 
 ### Start the server
 ```bash
-go run ./cmd/same-same -addr :8080
+# Using go run
+go run ./cmd/same-same serve -a :8080
+
+# Or build first
+go build ./cmd/same-same
+./same-same serve -a :8080
 ```
 
 ## Usage

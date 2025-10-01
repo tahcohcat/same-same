@@ -5,20 +5,18 @@ The `ingest` command provides a flexible way to load data from multiple sources 
 ## Quick Start
 
 ```bash
-# Build the ingest tool
-go build ./cmd/ingest
+# Build the same-same CLI tool
+go build ./cmd/same-same
 
 # Ingest built-in demo dataset
-./ingest demo
+./same-same ingest demo
 
-# Ingest with namespace (flags must come before source)
-./ingest -namespace quotes demo
+# Ingest with namespace (short flags)
+./same-same ingest -n quotes demo
 
 # Dry run to validate data
-./ingest -dry-run -verbose data.jsonl
+./same-same ingest --dry-run -v data.jsonl
 ```
-
-**Important:** All flags must come before the source argument.
 
 ## Supported Sources
 
@@ -50,16 +48,16 @@ Load any public dataset from HuggingFace.
 **Usage:**
 ```bash
 # Basic dataset
-./ingest hf:imdb
+same-same ingest hf:imdb
 
 # Dataset with subset
-./ingest hf:squad:v2
+same-same ingest hf:squad:v2
 
 # Specify split
-./ingest -split test hf:imdb
+same-same ingest --split test hf:imdb
 
 # Use different embedder
-./ingest -embedder gemini hf:imdb
+same-same ingest -e gemini hf:imdb
 ```
 
 **How it works:**
@@ -75,13 +73,13 @@ Load data from CSV files.
 **Usage:**
 ```bash
 # Ingest CSV (text column named "text")
-./ingest data.csv
+same-same ingest data.csv
 
 # Specify custom text column
-./ingest -text-col content data.csv
+same-same ingest --text-col content data.csv
 
 # With namespace
-./ingest -namespace products -text-col description products.csv
+same-same ingest -n products --text-col description products.csv
 ```
 
 **CSV Format:**
@@ -160,7 +158,7 @@ Load data from JSONL/NDJSON files.
 
 ```bash
 export GEMINI_API_KEY=your_key_here
-./ingest -embedder gemini -namespace philosophy demo
+same-same ingest -e gemini -n philosophy demo
 ```
 
 ### Example 2: Ingest Custom CSV
@@ -170,7 +168,7 @@ export GEMINI_API_KEY=your_key_here
 # name,description,price,category
 # "Product 1","Great product...",29.99,electronics
 
-./ingest -text-col description -namespace products products.csv
+same-same ingest --text-col description -n products products.csv
 ```
 
 ### Example 3: Ingest HuggingFace Dataset
@@ -180,23 +178,23 @@ export GEMINI_API_KEY=your_key_here
 pip install datasets
 
 # Ingest IMDB reviews
-./ingest -namespace reviews -batch-size 500 hf:imdb
+same-same ingest -n reviews --batch-size 500 hf:imdb
 ```
 
 ### Example 4: Validate JSONL Before Ingesting
 
 ```bash
 # Check data quality first
-./ingest -dry-run -verbose data.jsonl
+same-same ingest --dry-run -v data.jsonl
 
 # If validation passes, ingest for real
-./ingest -namespace mydata data.jsonl
+same-same ingest -n mydata data.jsonl
 ```
 
 ### Example 5: Large Dataset with Timeout
 
 ```bash
-./ingest -timeout 2h -batch-size 1000 hf:wikipedia
+same-same ingest --timeout 2h --batch-size 1000 hf:wikipedia
 ```
 
 ## Output and Statistics
@@ -356,7 +354,7 @@ After ingestion:
 Enable verbose mode for detailed logging:
 
 ```bash
-./ingest -verbose your_source
+same-same ingest -v your_source
 ```
 
 For issues, check:

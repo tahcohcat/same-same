@@ -1,16 +1,16 @@
 # Quick Start Examples
 
-## Build the Ingest Tool
+## Build the CLI Tool
 
 ```bash
-go build ./cmd/ingest
+go build ./cmd/same-same
 ```
 
 ## Basic Examples
 
 ### 1. Ingest Demo Dataset (20 quotes)
 ```bash
-./ingest demo
+same-same ingest demo
 ```
 
 Output:
@@ -29,33 +29,34 @@ Storage Details:
 
 ### 2. Ingest with Custom Namespace
 ```bash
-./ingest -namespace philosophy demo
+same-same ingest -n philosophy demo
 ```
 
 ### 3. Ingest CSV File
 ```bash
-./ingest .examples/data/sample.csv
+same-same ingest .examples/data/sample.csv
 ```
 
 ### 4. Dry Run (Validate Only)
 ```bash
-./ingest -dry-run -verbose demo
+same-same ingest --dry-run -v demo
 ```
 
 ### 5. Full Quotes Dataset
 ```bash
-./ingest -verbose quotes
+same-same ingest -v quotes
 ```
 
 ### 6. With Gemini Embeddings
 ```bash
 export GEMINI_API_KEY=your_key
-./ingest -embedder gemini demo
+same-same ingest -e gemini demo
 ```
 
-## Remember
+## CLI Commands
 
-- **Flags before source**: `./ingest -namespace test demo` ✓
-- **Not after**: `./ingest demo -namespace test` ✗
+- **Ingest data**: `same-same ingest <source> [flags]`
+- **Start server**: `same-same serve [flags]`
+- **Help**: `same-same --help` or `same-same ingest --help`
 
 See [INGESTION_GUIDE.md](../../INGESTION_GUIDE.md) for full documentation.
