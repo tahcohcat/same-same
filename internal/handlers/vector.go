@@ -62,14 +62,8 @@ func (vh *VectorHandler) EmbedVector(w http.ResponseWriter, r *http.Request) {
 	var embedding []float64
 	var err error
 
-	// Fix for TF-IDF: Use EmbedWithBootstrap if available
-	if tfidfEmbedder, ok := vh.embedder.(*tfidf.TFIDFEmbedder); ok {
-		// Use bootstrap method for TF-IDF
-		embedding, err = tfidfEmbedder.EmbedWithBootstrap(fullText)
-	} else {
-		// Standard embed for other embedders
-		embedding, err = vh.embedder.Embed(fullText)
-	}
+	// Generate embedding
+	embedding, err = vh.embedder.Embed(fullText)
 
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to generate embedding: %v", err), http.StatusInternalServerError)

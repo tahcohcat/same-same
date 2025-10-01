@@ -53,7 +53,7 @@ func (s *Server) setupRoutes() {
 	api.HandleFunc("/vectors/search", s.handler.SearchVectors).Methods("POST")
 	api.HandleFunc("/search", s.handler.SearchByText).Methods("POST")
 	api.HandleFunc("/search", s.handler.AdvancedSearch).Methods("POST")
-	api.HandleFunc("/search/temporal", s.handler.TemporalSearch).Methods("POST") // Temporal-aware search
+	// api.HandleFunc("/search/temporal", s.handler.TemporalSearch).Methods("POST") // Temporal-aware search (TODO: implement)
 
 	api.HandleFunc("/embedder/stats", s.handler.GetEmbedderStats).Methods("GET")
 	s.router.HandleFunc("/health", s.healthCheck).Methods("GET")
