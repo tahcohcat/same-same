@@ -10,6 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/tahcohcat/same-same/internal/embedders"
+	"github.com/tahcohcat/same-same/internal/embedders/clip"
 	"github.com/tahcohcat/same-same/internal/embedders/quotes/gemini"
 	"github.com/tahcohcat/same-same/internal/embedders/quotes/huggingface"
 	"github.com/tahcohcat/same-same/internal/embedders/quotes/local/tfidf"
@@ -30,6 +31,9 @@ var (
 	embedderType string
 	timeout      time.Duration
 	output       string
+	recursive    bool
+	clipModel    string
+	clipPretrain string
 )
 
 func init() {
@@ -60,6 +64,8 @@ Sources:
   file.csv                      CSV file
   file.jsonl                    JSONL file (each line is a JSON object)
   file.json                     Same as JSONL
+  images:<directory>            Directory of images (requires -e clip)
+  image-list:<file.txt>         Text file with image paths (requires -e clip)
 
 The ingestion pipeline:
   1. Reads records from the source
@@ -84,7 +90,13 @@ The ingestion pipeline:
   same-same ingest --dry-run -v data.jsonl
 
   # Use specific embedder
-  same-same ingest -e gemini demo`,
+  same-same ingest -e gemini demo
+  
+  # Ingest images with CLIP
+  same-same ingest -e clip images:./photos
+  
+  # Ingest images from list
+  same-same ingest -e clip image-list:images.txt`,
 	Args: cobra.ExactArgs(1),
 	Run:  runIngest,
 }
@@ -212,8 +224,15 @@ func createEmbedder(embedderType string) (embedders.Embedder, error) {
 		}
 		return huggingface.NewHuggingFaceEmbedder(apiKey), nil
 
+	case "clip":
+		embedder := clip.NewCLIPEmbedder(clipModel, clipPretrain)
+		if verbose {
+			fmt.Printf("Using CLIP model: %s with pretrained: %s\n", clipModel, clipPretrain)
+		}
+		return embedder, nil
+
 	default:
-		return nil, fmt.Errorf("unknown embedder type: %s (supported: local, gemini, huggingface)", embedderType)
+		return nil, fmt.Errorf("unknown embedder type: %s (supported: local, gemini, huggingface, clip)", embedderType)
 	}
 }
 
