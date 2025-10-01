@@ -513,7 +513,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [OpenCLIP](https://github.com/mlfoundations/open_clip) for CLIP model inspiration
 - [Cobra](https://github.com/spf13/cobra) for CLI framework
