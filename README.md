@@ -25,15 +25,15 @@ Designed and optimised for quick prototyping and exploration of the vector space
 - **Dual Storage Options**
   - In-memory vector storage with thread safety (default)
   - [Local file system storage](LOCAL_FILE_STORAGE.md) with schema-driven persistence, metadata indexing, and multimodal support
+- **Multimodal Embedding Support**
+  - **CLIP** - Embed images and text into the same vector space for cross-modal search
+  - **Text Embedders**: Local TF-IDF (default), Google Gemini API, HuggingFace API
+  - Search images with text queries and vice versa
 - RESTful API for CRUD operations
 - Vector similarity search using cosine similarity
-- Automatic embedding generation using:
-  - Local TF-IDF embedder (default, no external dependencies)
-  - Google Gemini API
-  - HuggingFace API
 - Quote-specific endpoints for easy text vectorization
 - Advanced [metadata filtering and search](ADVANCED_SEARCH_USAGE.md)
-- Pluggable embedder interface (local TF-IDF, Gemini, HuggingFace)
+- Pluggable embedder interface
 - JSON API responses
 
 

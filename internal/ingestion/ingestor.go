@@ -106,7 +106,27 @@ func (ing *Ingestor) Run(ctx context.Context) (*Stats, error) {
 		}
 		
 		// Generate embedding
-		embedding, err := ing.embedder.Embed(record.Text)
+		var embedding []float64
+		
+		// Check if this is an image record and embedder supports images
+		if record.Metadata["type"] == "image" {
+			if imgEmbedder, ok := ing.embedder.(interface {
+				EmbedImage(string) ([]float64, error)
+			}); ok {
+				// Use image embedding
+				embedding, err = imgEmbedder.EmbedImage(record.Text)
+			} else {
+				ing.stats.FailureCount++
+				ing.stats.FailureReasons["embedder_not_multimodal"]++
+				if ing.config.Verbose {
+					fmt.Printf("Embedder does not support images, skipping: %s\n", record.Text)
+				}
+				continue
+			}
+		} else {
+			// Use text embedding
+			embedding, err = ing.embedder.Embed(record.Text)
+		}
 		if err != nil {
 			ing.stats.FailureCount++
 			ing.stats.FailureReasons["embed_error"]++
