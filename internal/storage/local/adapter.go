@@ -191,9 +191,6 @@ func (vsa *VectorStorageAdapter) AdvancedSearch(req *models.AdvancedSearchReques
 		return nil, err
 	}
 
-	
-	results := make([]*models.SearchResult, 0)
-
 	for _, doc := range collection.Documents {
 		if doc.Embedding == nil {
 			continue
@@ -237,8 +234,15 @@ func (vsa *VectorStorageAdapter) AdvancedSearch(req *models.AdvancedSearchReques
 		Options:   req.Options,
 	}
 
-	results = search.FilterAndScoreVectors(vectors, advancedReq)
-	return results, nil
+	searchResults := search.FilterAndScoreVectors(vectors, advancedReq)
+	return searchResults, nil
+}
+
+// TemporalSearch implements the Storage interface.
+// TODO: Replace the implementation with actual logic as needed.
+func (v *VectorStorageAdapter) TemporalSearch(*models.TemporalSearchRequest, []float64) ([]*models.TemporalSearchResult, error) {
+	// Implement the required logic or return nil/error as a stub
+	return nil, nil
 }
 
 // Close closes the storage

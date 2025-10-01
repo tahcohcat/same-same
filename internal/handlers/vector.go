@@ -7,8 +7,10 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 
 	"github.com/tahcohcat/same-same/internal/embedders"
+	"github.com/tahcohcat/same-same/internal/embedders/quotes/local/tfidf"
 	"github.com/tahcohcat/same-same/internal/models"
 	"github.com/tahcohcat/same-same/internal/storage"
 )
@@ -56,10 +58,35 @@ func (vh *VectorHandler) EmbedVector(w http.ResponseWriter, r *http.Request) {
 
 	// Generate embedding for the quote text
 	fullText := quote.Text + " - " + quote.Author
-	embedding, err := vh.embedder.Embed(fullText)
+
+	var embedding []float64
+	var err error
+
+	// Fix for TF-IDF: Use EmbedWithBootstrap if available
+	if tfidfEmbedder, ok := vh.embedder.(*tfidf.TFIDFEmbedder); ok {
+		// Use bootstrap method for TF-IDF
+		embedding, err = tfidfEmbedder.EmbedWithBootstrap(fullText)
+	} else {
+		// Standard embed for other embedders
+		embedding, err = vh.embedder.Embed(fullText)
+	}
+
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to generate embedding: %v", err), http.StatusInternalServerError)
 		return
+	}
+
+	// Verify non-zero embedding
+	hasNonZero := false
+	for _, val := range embedding {
+		if val != 0 {
+			hasNonZero = true
+			break
+		}
+	}
+
+	if !hasNonZero {
+		logrus.Warn("Generated zero-only embedding, vocabulary may need bootstrapping")
 	}
 
 	// Create vector with generated ID and metadata
@@ -72,6 +99,8 @@ func (vh *VectorHandler) EmbedVector(w http.ResponseWriter, r *http.Request) {
 			"text":          quote.Text,
 			"embedder.name": vh.embedder.Name(),
 		},
+		CreatedAt: time.Now(), // Set creation time
+		UpdatedAt: time.Now(), // Set update time
 	}
 
 	if err := vh.storage.Store(&vector); err != nil {
@@ -243,4 +272,22 @@ func (vh *VectorHandler) CountVectors(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
+}
+
+func (vh *VectorHandler) GetEmbedderStats(w http.ResponseWriter, r *http.Request) {
+	stats := make(map[string]interface{})
+
+	stats["type"] = vh.embedder.Name()
+
+	if vh.embedder.Name() == "local.tfidf" {
+		stats["type"] = "local.tfidf"
+
+		if tfidfEmbedder, ok := vh.embedder.(*tfidf.TFIDFEmbedder); ok {
+			stats["vocabulary_size"] = tfidfEmbedder.GetVocabularySize()
+			stats["document_count"] = tfidfEmbedder.GetDocumentCount()
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(stats)
 }
